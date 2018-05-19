@@ -320,6 +320,9 @@ namespace storeman
             //Get Time 
             DateTime datetime = DateTime.Now;
 
+            int stockLeft = 0;
+            int statusCount = 1;
+
             //create transaction query list for sales processing
             List<string> queryList = new List<string>();
 
@@ -417,7 +420,7 @@ namespace storeman
                 if (mydbAccess.Status == 1)
                 {
                     var result = mydbAccess.Result;
-                  
+
                     //ALREADY AVAILABLE VALUES
                     //sales_date(computed)
                     //product_sub_id(from listview)
@@ -425,16 +428,18 @@ namespace storeman
                     //sales_price_unit(from listview)
                     //user_id(from class)
 
-                    int i = 0; 
+                    int i = 0;
 
                     do
                     {
-                      
+                        statusCount = statusCount + i;
+
                         int recordStockLeft = (int)result.Rows[i]["stock_left"];
                         int recordId = (int)result.Rows[i]["id"];
 
                         //get varying table values
                         int quantityStore = newQuantity;
+
                         newQuantity = newQuantity - recordStockLeft;
 
                         string unitCostPrice1 = result.Rows[i]["stock_unit_cost_price"].ToString();
@@ -443,15 +448,24 @@ namespace storeman
                         //check if result is zero or negative i.e the current st record can take care of the order
                         if (newQuantity <= 0)
                         {
-                            //update stocktacker record reduce stock_left(modulus of newQuantity)
-                            queryList.Add("update stock_tracker set stock_left = '" + Math.Abs(newQuantity) + "'where id = '" + recordId + "'");
+                            if (newQuantity == 0)
+                            {
+                                //ceate Delete current record from stock tracker
+                                queryList.Add("delete from stock_tracker where id = '" + recordId + "'");
+                            }
+
+                            else
+                            {
+                                //update stocktacker record reduce stock_left(modulus of newQuantity)
+                                queryList.Add("update stock_tracker set stock_left = '" + Math.Abs(newQuantity) + "'where id = '" + recordId + "'");
+                            }
+
+                            stockLeft = Math.Abs(newQuantity);
 
                             newQuantity = quantityStore;
                             //create insert into sales(quantity will be quantity)
-                            queryList.Add("insert into sales(sales_date,product_sub_id,product_id,sales_quantity,sales_price_unit,unit_cost_price,user_id)values('"+datetime+ "','" + id + "','" + id1 + "','" + newQuantity + "','" + salesPrice + "','" + unitCostPrice + "','" + userId + "')");
-                           
-                            
-                           
+                            queryList.Add("insert into sales(sales_date,product_sub_id,product_id,sales_quantity,sales_price_unit,unit_cost_price,user_id)values('" + datetime + "','" + id + "','" + id1 + "','" + newQuantity + "','" + salesPrice + "','" + unitCostPrice + "','" + userId + "')");
+                        
                             //proceed to house cleaning i.e set check to 1
                             check = 1;
                         }
@@ -476,19 +490,19 @@ namespace storeman
 
             foreach(var id in statusUpdate)
             {
-                int stockLeft = 0;
+               
                 int restockLevel = 0;
                 int status = 0;
 
                 //select the product restock level
-                mydbAccess.Query = @"select product_sub_restock_level from product_sub where product_sub_id = '" + id + "'";
+                mydbAccess.Query = @"select product_sub_restock_level from product_sub where id = '" + id + "'";
                 mydbAccess.Select();
 
-                if(mydbAccess.Status == 1)
+                if (mydbAccess.Status == 1)
                 {
                     var result = mydbAccess.Result;
                     restockLevel = (int)result.Rows[0]["product_sub_restock_level"];
-                    
+
                     //calculate the stock left 
                     mydbAccess.Query = @"select stock_left from stock_tracker where product_sub_id = '" + id + "'";
                     mydbAccess.Select();
@@ -498,37 +512,37 @@ namespace storeman
                         var result1 = mydbAccess.Result;
                         int sum = 0;
 
-                        for (int i = 0; i < result1.Rows.Count; i++)
+                        if (result.Rows.Count > 1)
                         {
-                            int stockLeftInt = (int)result1.Rows[i]["stock_left"];
-                            sum += stockLeftInt;
+
+                            for (int i = statusCount; i < result1.Rows.Count; i++)
+                            {
+                                int stockLeftInt = (int)result1.Rows[i]["stock_left"];
+                                sum += stockLeftInt;
+                            }
+
+                            stockLeft += sum;
                         }
 
-                        stockLeft = sum;
+                        //compare with the product sub restock level and set the status accordingly
+
+                        if (stockLeft == 0)
+                        {
+                            status = 3;
+                        }
+
+                        else if (stockLeft > restockLevel)
+                        {
+                            status = 1;
+                        }
+
+                        else
+                        {
+                            status = 2;
+                        }            
                     }
-
-                    else
-                    {
-                        stockLeft = 0;
-                    }
                 }
-               
-                //compare with the product sub restock level and set the status accordingly
-                if(stockLeft == 0)
-                {
-                    status = 3;
-                }
-
-                else if (stockLeft <= restockLevel)
-                {
-                    status = 2;
-                }
-
-                else if (stockLeft <= restockLevel)
-                {
-                    status = 1;
-                }
-
+              
                 //add query to query list
 
                 queryList.Add("update product_sub set product_sub_status = '"+status+"' where id = '"+id+"'");
@@ -847,7 +861,7 @@ namespace storeman
                             change1 = change.ToString();
                         }
                         //check if customer details is complete
-                        if (numericUpDown2.Value <= 0 || textBox4.Text == "" || textBox5.Text == "" || textBox7.Text == "")
+                        if (numericUpDown2.Value < 0 || textBox4.Text == "" || textBox5.Text == "" || textBox7.Text == "")
                         {
                             MessageBox.Show("Fill in Customer Complete Details");
                             checkBox1.Checked = false;

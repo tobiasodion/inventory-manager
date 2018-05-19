@@ -79,15 +79,15 @@ namespace storeman
                                 product_category_id) VALUES ('" + productName + "','" + productSubName + "','"
                                 + productFullName + "','" + productSalesUnit + "','" + product_categoryId + "')";
 
-                string query3 = @"INSERT INTO [product_sub] (product_id, product_sub_name) VALUES 
-                                (IDENT_CURRENT('product'),'" + productFullName + "')";
+                string query3 = @"INSERT INTO [product_sub] (product_id, product_sub_name,product_sub_status) VALUES 
+                                (IDENT_CURRENT('product'),'" + productFullName + "','4')";
 
-                string query4 = @"INSERT INTO [stock_tracker] (product_sub_id, stock_left, stock_status) VALUES
-                                  (IDENT_CURRENT('product_sub'), '0', '4')";
+              //  string query4 = @"INSERT INTO [stock_tracker] (product_id,product_sub_id, stock_left) VALUES
+              //                    (IDENT_CURRENT('product'),IDENT_CURRENT('product_sub'), '0')";
 
                 queryList.Add(query2);
                 queryList.Add(query3);
-                queryList.Add(query4);
+             //   queryList.Add(query4);
 
                 mydbAccess.QueryList = queryList;
                 mydbAccess.TransactionOperation();
@@ -96,11 +96,25 @@ namespace storeman
                 {
                     MessageBox.Show("Product Added Successfully");
 
-                    //RefreshPage
-                    ProductForm myproductform = new ProductForm(firstname, userRole, userId);
-                    this.Hide();
-                    myproductform.Show();
-                    //  myproductform.button9.PerformClick();
+                    DialogResult dialogResult = MessageBox.Show("Does this product have subcategories? i.e different sizes with different prices. Select Yes to add the subcategories. NB:Subcategory for a new product must be at least two", "Sub Category Option", MessageBoxButtons.YesNo);
+
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        textBox1.Clear();
+                        textBox5.Clear();
+                        textBox4.Clear();
+                        ComboBoxUpdate();
+
+                        tabControl1.SelectedTab = tabPage3;
+                    }
+                    else if(dialogResult == DialogResult.No)
+                    {
+                        //RefreshPage
+                        ProductForm myproductform = new ProductForm(firstname, userRole, userId);
+                        this.Hide();
+                        myproductform.Show();
+                    }
+                 
                 }
 
                 else
@@ -335,11 +349,11 @@ namespace storeman
                 string query1 = @"update product_sub set product_sub_name = '"
                                 + productSub1 + "' where product_id = '" + productId + "'";
 
-                string query2 = @"insert into product_sub(product_id, product_sub_name)
-                                values('" + productId + "','" + productSub2 + "')";
+                string query2 = @"insert into product_sub(product_id, product_sub_name,product_sub_status)
+                                values('" + productId + "','" + productSub2 + "','4')";
 
-                string query3 = @"INSERT INTO [stock_tracker] (product_sub_id, stock_left, stock_status) VALUES
-                                  (IDENT_CURRENT('product_sub'), '0', '4')";
+                string query3 = @"INSERT INTO [stock_tracker] (product_id,product_sub_id, stock_left) VALUES
+                                  ('" + productId + "',IDENT_CURRENT('product_sub'), '0')";
 
                 queryList.Add(query1);
                 queryList.Add(query2);
@@ -436,6 +450,5 @@ namespace storeman
             tabControl1.SelectedTab = tabPage3;
         }
 
-    
-        }
+    }
     }

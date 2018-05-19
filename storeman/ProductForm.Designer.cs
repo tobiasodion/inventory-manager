@@ -37,6 +37,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -72,9 +75,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.button9 = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -203,6 +203,41 @@
             this.panel2.Size = new System.Drawing.Size(700, 355);
             this.panel2.TabIndex = 21;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.Color.White;
+            this.label17.Location = new System.Drawing.Point(413, 286);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(249, 13);
+            this.label17.TabIndex = 36;
+            this.label17.Text = "Add the product first before adding the subcategory";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.White;
+            this.label18.Location = new System.Drawing.Point(459, 273);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(147, 13);
+            this.label18.TabIndex = 35;
+            this.label18.Text = "Add subcategory to a product";
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.ForeColor = System.Drawing.Color.White;
+            this.button9.Location = new System.Drawing.Point(459, 227);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(158, 31);
+            this.button9.TabIndex = 34;
+            this.button9.Text = "Add Subcategory";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(135, 185);
@@ -292,7 +327,6 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(236, 28);
             this.comboBox1.TabIndex = 26;
-            
             // 
             // textBox4
             // 
@@ -307,6 +341,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(236, 26);
             this.textBox1.TabIndex = 24;
+           
             // 
             // label6
             // 
@@ -578,41 +613,6 @@
             this.label14.Size = new System.Drawing.Size(100, 20);
             this.label14.TabIndex = 21;
             this.label14.Text = "Sub - Cat 1";
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(459, 227);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(158, 31);
-            this.button9.TabIndex = 34;
-            this.button9.Text = "Add Subcategory";
-            this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.ForeColor = System.Drawing.Color.White;
-            this.label17.Location = new System.Drawing.Point(413, 286);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(249, 13);
-            this.label17.TabIndex = 36;
-            this.label17.Text = "Add the product first before adding the subcategory";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(459, 273);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(147, 13);
-            this.label18.TabIndex = 35;
-            this.label18.Text = "Add subcategory to a product";
             // 
             // ProductForm
             // 

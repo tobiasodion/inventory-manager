@@ -95,13 +95,13 @@ namespace storeman
                                            + newStockQuantity + "','" + totalCost + "','" + costPerUnit + "')";
 
                             string query2 = @"UPDATE [product_sub] SET product_sub_price = '"+ sellingPrice + "',product_sub_restock_level = '"
-                                        +restockLevel+"', product_sub_status = '1' WHERE id = '" + id + "'";
+                                           +restockLevel+"', product_sub_status = '1' WHERE id = '" + id + "'";
 
                         
                             string query3 = @"Insert into stock_tracker (product_sub_id, product_id, stock_left, stock_unit_cost_price
                                             ) values('"+id+ "','" + id1 + "','" + newStockQuantity + "', '" + costPerUnit + "')";
 
-                             string query4 = @"update product_sub set product_sub_status ='1' where '"+id+"' ";
+                             string query4 = @"update product_sub set product_sub_status ='1' where id = '"+id+"' ";
                        
 
                         queryList.Add(query1);

@@ -142,7 +142,7 @@ namespace storeman
                 result = new DataTable();
                 MyAdapter.Fill(result);
 
-                if (result.Rows.Count != 0)
+                if (result.Rows.Count > 0)
                 {
                     //query succeeds: rows affected/ status 1 message null
                     status = 1;
