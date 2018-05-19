@@ -22,6 +22,8 @@ namespace storeman
 
         //NEW PRODUCT, IN STOCK, LOW STOCK or OUT OF STOCK
         string productStatus;
+        string currentPrice;
+        string unit;
 
 
         static string conn = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
@@ -37,7 +39,8 @@ namespace storeman
             label1.Hide();
             label2.Hide();
             label4.Hide();
-
+            label15.Hide();
+           
             ComboBox2Update();
             ComboBox1Update(-1);
             ComboBox3Update(-1);
@@ -57,6 +60,7 @@ namespace storeman
                 {
                     label4.Hide();
                     label2.Hide();
+                    label15.Hide();
                 }          
             }
             else
@@ -176,6 +180,7 @@ namespace storeman
             {
                 label4.Hide();
                 label2.Hide();
+                label15.Hide();
             }
             int id = (int)comboBox1.SelectedValue;
             ComboBox3Update(id);
@@ -203,19 +208,15 @@ namespace storeman
                 {
                     var result = mydbAccess.Result;
                     productStatus = result.Rows[0]["status"].ToString();
+                    currentPrice = result.Rows[0]["product_sub_price"].ToString();
+                    unit = result.Rows[0]["product_sales_unit"].ToString();
 
-                    string unit = result.Rows[0]["product_sales_unit"].ToString();
                     label1.Text = "(" + unit + ")";
                     label1.Show();
 
                     //if product sub category is not new
                     if (productStatus != "NEW PRODUCT")
                     {
-                        
-                        productStatus = result.Rows[0]["status"].ToString();
-
-                        label4.Text = "STATUS: " + productStatus;
-                        label4.Show();
 
                         //calculate stockLeft
 
@@ -241,8 +242,15 @@ namespace storeman
                             stockLeft = "0";
                         }
 
+
                         label2.Text = stockLeft + " " + unit + " in stock";
                         label2.Show();
+
+                        label4.Text = "STATUS: " + productStatus;
+                        label4.Show();
+
+                        label15.Text = "CURRENT PRICE: #" + currentPrice;
+                        label15.Show();
 
                     }
 
@@ -252,6 +260,7 @@ namespace storeman
                         if(label2.Visible == true)
                         {
                             label2.Hide();
+                            label15.Hide();
                         }
 
                         stockLeft = "0";

@@ -59,6 +59,7 @@ namespace storeman
             {
                 int id = (int)comboBox3.SelectedValue;
                 int id1 = (int)comboBox1.SelectedValue;
+                int check = 0;
 
                 if (id == -1 || id1 == -1)
                 {
@@ -66,8 +67,34 @@ namespace storeman
                 }
                 else
                 {
-                    mydbAccess.Query = @"select product_sub_price from [product_sub] where id='" 
-                                       + id + "' AND product_id = '"+id1+"'";
+                    if (listView1.Items.Count != 0)
+                    {
+                       
+                        //check if cart already contains product
+                        foreach (ListViewItem cartItem in listView1.Items)
+                        {
+                            string sId = cartItem.SubItems[4].Text;
+                            int checkId = Int32.Parse(sId);
+
+                            if (checkId == id)
+                            {
+                                check = 1;
+                            }
+                        }
+
+                        //if yes prompt user to remove and re - add prouct
+                        if (check == 1)
+                        {
+                            MessageBox.Show("Product Already in Cart. Remove product and Add once!");
+                        }
+                    }
+
+
+                    if (check == 0)
+                    { 
+                        mydbAccess.Query = @"select product_sub_price from [product_sub] where id='"
+                                       + id + "' AND product_id = '" + id1 + "'";
+
                     mydbAccess.Select();
 
                     if (mydbAccess.Status == 1)
@@ -96,13 +123,14 @@ namespace storeman
                         //grand total at checkout form
                         label5.Text = label4.Text;
 
-                       
-                        string[] cartItem = { product, product_sub_price,Quantity,stringtotal,productId1,productSubId1 };
+
+                        string[] cartItem = { product, product_sub_price, Quantity, stringtotal, productId1, productSubId1 };
                         var listViewItem = new ListViewItem(cartItem);
                         listView1.Items.Add(listViewItem);
                         numericUpDown1.Value = 0;
                     }
                 }
+            }
 
                 ComboBox2Update();
                 ComboBox1Update(-1);
@@ -274,7 +302,11 @@ namespace storeman
         //Remove item from cart
         private void button6_Click(object sender, EventArgs e)
         {
-           
+            if (listView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Select Item to Remove before clicking Remove Button!");
+            }
+
             foreach (ListViewItem cartItem in listView1.SelectedItems)
             {
                 string price = listView1.SelectedItems[0].SubItems[3].Text;
