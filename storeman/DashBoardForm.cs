@@ -64,8 +64,7 @@ namespace storeman
 
         private void button4_Click(object sender, EventArgs e)
         {
-            //do housekeeping
-            //get total stockleft, compare stock left with restock level set
+          
             POSForm myposform = new POSForm(firstname, userRole, userId);
             this.Hide();
             myposform.Show();

@@ -63,18 +63,34 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button6 = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button8 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
+            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.button10 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -83,6 +99,8 @@
             this.panel3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -131,6 +149,7 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.BackgroundImage = global::storeman.Properties.Resources.shopping_cart_512;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
@@ -236,7 +255,7 @@
             this.button9.TabIndex = 34;
             this.button9.Text = "Add Subcategory";
             this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button9.Click += new System.EventHandler(this.button9_Click_1);
             // 
             // textBox5
             // 
@@ -341,7 +360,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(236, 26);
             this.textBox1.TabIndex = 24;
-           
             // 
             // label6
             // 
@@ -471,35 +489,270 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(776, 410);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Add Sub-Category";
+            this.tabPage3.Text = "Manage Product";
             // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.Blue;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel4.Controls.Add(this.button10);
+            this.panel4.Controls.Add(this.checkBox4);
+            this.panel4.Controls.Add(this.checkBox2);
+            this.panel4.Controls.Add(this.checkBox3);
+            this.panel4.Controls.Add(this.radioButton2);
+            this.panel4.Controls.Add(this.radioButton1);
+            this.panel4.Controls.Add(this.label28);
+            this.panel4.Controls.Add(this.textBox6);
+            this.panel4.Controls.Add(this.label27);
+            this.panel4.Controls.Add(this.label23);
+            this.panel4.Controls.Add(this.label22);
+            this.panel4.Controls.Add(this.numericUpDown2);
+            this.panel4.Controls.Add(this.numericUpDown1);
+            this.panel4.Controls.Add(this.label21);
+            this.panel4.Controls.Add(this.label20);
+            this.panel4.Controls.Add(this.label19);
+            this.panel4.Controls.Add(this.label15);
+            this.panel4.Controls.Add(this.label14);
+            this.panel4.Controls.Add(this.button8);
+            this.panel4.Controls.Add(this.checkBox1);
             this.panel4.Controls.Add(this.button6);
             this.panel4.Controls.Add(this.textBox8);
             this.panel4.Controls.Add(this.label16);
-            this.panel4.Controls.Add(this.textBox6);
-            this.panel4.Controls.Add(this.label15);
             this.panel4.Controls.Add(this.comboBox2);
             this.panel4.Controls.Add(this.listBox1);
-            this.panel4.Controls.Add(this.button8);
             this.panel4.Controls.Add(this.label12);
             this.panel4.Controls.Add(this.label13);
-            this.panel4.Controls.Add(this.textBox7);
-            this.panel4.Controls.Add(this.label14);
-            this.panel4.Location = new System.Drawing.Point(41, 19);
+            this.panel4.Controls.Add(this.listBox2);
+            this.panel4.Location = new System.Drawing.Point(8, 19);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(691, 383);
+            this.panel4.Size = new System.Drawing.Size(760, 383);
             this.panel4.TabIndex = 23;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.ForeColor = System.Drawing.Color.White;
+            this.checkBox4.Location = new System.Drawing.Point(700, 282);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(58, 24);
+            this.checkBox4.TabIndex = 61;
+            this.checkBox4.Text = "edit";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.ForeColor = System.Drawing.Color.White;
+            this.checkBox2.Location = new System.Drawing.Point(703, 139);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(58, 24);
+            this.checkBox2.TabIndex = 59;
+            this.checkBox2.Text = "edit";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.ForeColor = System.Drawing.Color.White;
+            this.checkBox3.Location = new System.Drawing.Point(703, 210);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(58, 24);
+            this.checkBox3.TabIndex = 60;
+            this.checkBox3.Text = "edit";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.ForeColor = System.Drawing.Color.Red;
+            this.radioButton2.Location = new System.Drawing.Point(634, 68);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(80, 24);
+            this.radioButton2.TabIndex = 58;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Delete";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.ForeColor = System.Drawing.Color.Red;
+            this.radioButton1.Location = new System.Drawing.Point(539, 68);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(86, 24);
+            this.radioButton1.TabIndex = 57;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Update";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.ForeColor = System.Drawing.Color.White;
+            this.label28.Location = new System.Drawing.Point(553, 330);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(33, 20);
+            this.label28.TabIndex = 56;
+            this.label28.Text = "id1";
+            this.label28.Visible = false;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Enabled = false;
+            this.textBox6.Location = new System.Drawing.Point(542, 138);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(158, 26);
+            this.textBox6.TabIndex = 8;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.ForeColor = System.Drawing.Color.White;
+            this.label27.Location = new System.Drawing.Point(540, 107);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(161, 20);
+            this.label27.TabIndex = 54;
+            this.label27.Text = "Subcategory Name";
+            this.label27.Visible = false;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.ForeColor = System.Drawing.Color.White;
+            this.label23.Location = new System.Drawing.Point(619, 69);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(67, 20);
+            this.label23.TabIndex = 50;
+            this.label23.Text = "label23";
+            this.label23.Visible = false;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(598, 37);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(67, 20);
+            this.label22.TabIndex = 49;
+            this.label22.Text = "label22";
+            this.label22.Visible = false;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Enabled = false;
+            this.numericUpDown2.Location = new System.Drawing.Point(544, 280);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(153, 26);
+            this.numericUpDown2.TabIndex = 48;
+            this.numericUpDown2.Visible = false;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Enabled = false;
+            this.numericUpDown1.Location = new System.Drawing.Point(542, 209);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(155, 26);
+            this.numericUpDown1.TabIndex = 47;
+            this.numericUpDown1.Visible = false;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(538, 248);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(114, 20);
+            this.label21.TabIndex = 46;
+            this.label21.Text = "Current Price";
+            this.label21.Visible = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.ForeColor = System.Drawing.Color.White;
+            this.label20.Location = new System.Drawing.Point(538, 177);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(122, 20);
+            this.label20.TabIndex = 45;
+            this.label20.Text = "Restock Level";
+            this.label20.Visible = false;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(538, 68);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(89, 20);
+            this.label19.TabIndex = 44;
+            this.label19.Text = "stockLeft:";
+            this.label19.Visible = false;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(538, 36);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(67, 20);
+            this.label15.TabIndex = 43;
+            this.label15.Text = "Status:";
+            this.label15.Visible = false;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(677, 330);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(23, 20);
+            this.label14.TabIndex = 42;
+            this.label14.Text = "id";
+            this.label14.Visible = false;
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button8.Enabled = false;
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.ForeColor = System.Drawing.Color.White;
+            this.button8.Location = new System.Drawing.Point(592, 326);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(79, 31);
+            this.button8.TabIndex = 41;
+            this.button8.Text = "Update";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.ForeColor = System.Drawing.Color.White;
+            this.checkBox1.Location = new System.Drawing.Point(34, 239);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(247, 24);
+            this.checkBox1.TabIndex = 40;
+            this.checkBox1.Text = "No subcategory for Product";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.White;
-            this.button6.Location = new System.Drawing.Point(147, 295);
+            this.button6.Location = new System.Drawing.Point(49, 326);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(79, 31);
             this.button6.TabIndex = 39;
@@ -509,37 +762,20 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(119, 162);
+            this.textBox8.Location = new System.Drawing.Point(90, 167);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(215, 26);
+            this.textBox8.Size = new System.Drawing.Size(199, 26);
             this.textBox8.TabIndex = 38;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(18, 165);
+            this.label16.Location = new System.Drawing.Point(1, 167);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(90, 20);
             this.label16.TabIndex = 37;
             this.label16.Text = "Sub - Cat ";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(119, 216);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(215, 26);
-            this.textBox6.TabIndex = 36;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(13, 219);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(90, 20);
-            this.label15.TabIndex = 35;
-            this.label15.Text = "Sub-Cat 2";
             // 
             // comboBox2
             // 
@@ -548,9 +784,9 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(119, 107);
+            this.comboBox2.Location = new System.Drawing.Point(90, 107);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(215, 28);
+            this.comboBox2.Size = new System.Drawing.Size(199, 28);
             this.comboBox2.TabIndex = 34;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -558,29 +794,17 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(371, 82);
+            this.listBox1.Location = new System.Drawing.Point(298, 35);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(286, 264);
+            this.listBox1.Size = new System.Drawing.Size(234, 324);
             this.listBox1.TabIndex = 33;
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(147, 295);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(79, 31);
-            this.button8.TabIndex = 32;
-            this.button8.Text = "Add";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(37, 110);
+            this.label12.Location = new System.Drawing.Point(15, 110);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(71, 20);
             this.label12.TabIndex = 31;
@@ -591,28 +815,34 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Gill Sans Ultra Bold", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(75, 27);
+            this.label13.Location = new System.Drawing.Point(42, 25);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(243, 39);
             this.label13.TabIndex = 29;
             this.label13.Text = "Sub-Category";
             // 
-            // textBox7
+            // listBox2
             // 
-            this.textBox7.Location = new System.Drawing.Point(119, 162);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(215, 26);
-            this.textBox7.TabIndex = 24;
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 20;
+            this.listBox2.Location = new System.Drawing.Point(298, 35);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(234, 324);
+            this.listBox2.TabIndex = 53;
             // 
-            // label14
+            // button10
             // 
-            this.label14.AutoSize = true;
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(3, 165);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(100, 20);
-            this.label14.TabIndex = 21;
-            this.label14.Text = "Sub - Cat 1";
+            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.ForeColor = System.Drawing.Color.White;
+            this.button10.Location = new System.Drawing.Point(180, 326);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(79, 31);
+            this.button10.TabIndex = 62;
+            this.button10.Text = "Delete";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Visible = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // ProductForm
             // 
@@ -638,6 +868,8 @@
             this.tabPage3.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -676,19 +908,35 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.Button button10;
     }
 }
 

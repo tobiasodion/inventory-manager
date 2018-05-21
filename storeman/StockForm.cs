@@ -194,7 +194,6 @@ namespace storeman
             //when a subcategory must be selected
             if (id != -1)
             {
-               
                 //Get Product Details(name, sales_unit, current_price, status 
                 mydbAccess.Query = @"select r.product_sub_name, r.product_sales_unit, r.product_sub_price, r.status from
                                     (select ps.*,plk.status, p.product_sales_unit from [product_sub] ps 

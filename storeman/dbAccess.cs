@@ -128,8 +128,6 @@ namespace storeman
         }
 
 
-
-
         public void Select()
         {
             try
@@ -202,7 +200,32 @@ namespace storeman
 
         public void Delete()
         {
+            try
+            {
+                myConnection = new SqlConnection(connection);
+                myConnection.Open();
+                SqlCommand cmd;
+                SqlDataAdapter MyAdapter;
 
+                cmd = new SqlCommand(query, myConnection);
+                MyAdapter = new SqlDataAdapter(cmd);
+
+                MyAdapter.DeleteCommand = cmd;
+                MyAdapter.DeleteCommand.ExecuteNonQuery();
+
+                status = 1;
+
+                cmd.Dispose();
+                myConnection.Close();
+            }
+
+            catch (Exception ex)
+            {
+                //query did not succeed: error occured /status 0 message !null
+                status = 0;
+                message = ex.Message;
+                myConnection.Close();
+            }
         }
 
         public void TransactionOperation()
