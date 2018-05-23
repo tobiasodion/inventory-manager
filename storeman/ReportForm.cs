@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
 
 namespace storeman
 {
@@ -375,6 +378,47 @@ namespace storeman
             form3.Show();
         }
 
-        
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string storeName = ConfigurationManager.AppSettings["name"];
+            string address = ConfigurationManager.AppSettings["address"];
+            string contact = ConfigurationManager.AppSettings["contact"];
+
+            string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
+            string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
+
+            string totalSales = label10.Text;
+            string totalCost = label11.Text;
+            string Profit = label12.Text;
+
+            var doc1 = new Document();
+
+            //has to be made variable could be placed in the configuration file
+            string path = "C:/Users/TOBI/Documents";
+            PdfWriter.GetInstance(doc1, new FileStream(path + "/Report.pdf", FileMode.Create));
+
+            //manipulate document
+            doc1.Open();
+
+            doc1.Add(new Paragraph(storeName.ToUpper()));
+            doc1.Add(new Paragraph(address.ToUpper()));
+            doc1.Add(new Paragraph(contact.ToUpper()));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Add(new Paragraph("SALES REPORT FROM " +startDate.ToUpper()+ " - " + endDate.ToUpper() ));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Add(new Paragraph("TOTAL SALES: " + totalSales));
+            doc1.Add(new Paragraph(" TOTAL COST: " + totalCost));
+            doc1.Add(new Paragraph("     PROFIT: " + Profit));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Close();
+
+            MessageBox.Show("Report Pdf saved to: " + path );
+        }
     }
 }

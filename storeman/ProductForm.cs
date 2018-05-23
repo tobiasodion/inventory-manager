@@ -26,7 +26,7 @@ namespace storeman
             userRole = role;
             userId = id;
             InitializeComponent();
-            
+
             ComboBoxUpdate();
         }
 
@@ -63,7 +63,7 @@ namespace storeman
             //if product does not exist
             else if (mydbAccess.Status == 0)
             {
-                
+
                 mydbAccess.Query = @"INSERT INTO [product] (product_name, product_sub_name, product_full_name, product_sales_unit, 
                                 product_category_id) VALUES ('" + productName + "','" + productSubName + "','"
                                 + productFullName + "','" + productSalesUnit + "','" + product_categoryId + "')";
@@ -202,7 +202,7 @@ namespace storeman
         {
             int id = (int)comboBox2.SelectedValue;
 
-            if ( id != -1)
+            if (id != -1)
             {
                 listBox2.Hide();
                 listBox1.Show();
@@ -244,7 +244,7 @@ namespace storeman
                         checkBox1.Show();
                     }
 
-                    if(button10.Visible == false)
+                    if (button10.Visible == false)
                     {
                         button10.Show();
                     }
@@ -303,90 +303,90 @@ namespace storeman
             int productId = (int)comboBox2.SelectedValue;
             string productSub;
 
-           
-                if (productId == -1)
-                {
-                    MessageBox.Show("Select a Product!");
-                }
 
-                else
+            if (productId == -1)
+            {
+                MessageBox.Show("Select a Product!");
+            }
+
+            else
+            {
+                if (checkBox1.Checked == false)
                 {
-                    if (checkBox1.Checked == false)
+                    if (textBox8.Text != "")
                     {
-                        if (textBox8.Text != "")
-                        {
-                            productSub = textBox8.Text;
+                        productSub = textBox8.Text;
 
-                            mydbAccess.Query = @"insert into product_sub(product_id, product_sub_name, product_sub_status)
+                        mydbAccess.Query = @"insert into product_sub(product_id, product_sub_name, product_sub_status)
                                    values('" + productId + "','" + productSub + "','4')";
-                            mydbAccess.Insert();
+                        mydbAccess.Insert();
 
-                            if (mydbAccess.Status == 1)
-                            {
-                                MessageBox.Show("Product SubCategory Add Successful! Prduct Can be stocked Now");
-                            }
+                        if (mydbAccess.Status == 1)
+                        {
+                            MessageBox.Show("Product SubCategory Add Successful! Prduct Can be stocked Now");
+                        }
 
-                            else if (mydbAccess.Message == null)
-                            {
-                                MessageBox.Show("Product SubCategory Add NOT Successful!");
-                            }
-
-                            else
-                            {
-                                MessageBox.Show(mydbAccess.Message);
-                            }
+                        else if (mydbAccess.Message == null)
+                        {
+                            MessageBox.Show("Product SubCategory Add NOT Successful!");
                         }
 
                         else
                         {
-                            MessageBox.Show("Fill in Sub-Cat");
-                           comboBox2_SelectedIndexChanged(null, null);
-                            textBox8.Clear();
+                            MessageBox.Show(mydbAccess.Message);
                         }
                     }
 
-
-                    else if (checkBox1.Checked == true)
+                    else
                     {
-                        mydbAccess.Query = @"select product_full_name from product where id = '" + productId + "'";
-                        mydbAccess.Select();
+                        MessageBox.Show("Fill in Sub-Cat");
+                        comboBox2_SelectedIndexChanged(null, null);
+                        textBox8.Clear();
+                    }
+                }
+
+
+                else if (checkBox1.Checked == true)
+                {
+                    mydbAccess.Query = @"select product_full_name from product where id = '" + productId + "'";
+                    mydbAccess.Select();
+
+                    if (mydbAccess.Status == 1)
+                    {
+                        var result = mydbAccess.Result;
+                        productSub = result.Rows[0]["product_full_name"].ToString();
+
+                        mydbAccess.Query = @"insert into product_sub(product_id, product_sub_name, product_sub_status)
+                                   values('" + productId + "','" + productSub + "','4')";
+                        mydbAccess.Insert();
 
                         if (mydbAccess.Status == 1)
                         {
-                            var result = mydbAccess.Result;
-                            productSub = result.Rows[0]["product_full_name"].ToString();
-
-                            mydbAccess.Query = @"insert into product_sub(product_id, product_sub_name, product_sub_status)
-                                   values('" + productId + "','" + productSub + "','4')";
-                            mydbAccess.Insert();
-
-                            if (mydbAccess.Status == 1)
-                            {
-                                MessageBox.Show("Product Activation Successful! Product Can be stocked Now");
-                            }
-
-                            else if (mydbAccess.Message == null)
-                            {
-                                MessageBox.Show("Product Activation NOT Successful!");
-                            }
-
-                            else
-                            {
-                                MessageBox.Show(mydbAccess.Message);
-                            }
+                            MessageBox.Show("Product Activation Successful! Product Can be stocked Now");
                         }
 
+                        else if (mydbAccess.Message == null)
+                        {
+                            MessageBox.Show("Product Activation NOT Successful!");
+                        }
+
+                        else
+                        {
+                            MessageBox.Show(mydbAccess.Message);
+                        }
                     }
 
-                    //RefreshPage
-                    ProductForm myproductform = new ProductForm(firstname, userRole, userId);
-                    this.Hide();
-                    myproductform.Show();
-                    myproductform.button9.PerformClick();
+                }
 
-                }      
+                //RefreshPage
+                ProductForm myproductform = new ProductForm(firstname, userRole, userId);
+                this.Hide();
+                myproductform.Show();
+                myproductform.button9.PerformClick();
 
             }
+
+        }
 
         private void button9_Click(object sender, EventArgs e)
         {
@@ -405,7 +405,7 @@ namespace storeman
             {
                 button6.Text = "Add";
             }
-           
+
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -417,7 +417,7 @@ namespace storeman
             int check = 1;
             int id = Int32.Parse(label14.Text);
 
-            mydbAccess.Query = "select product_sub_status from product_sub where id = '"+id+"'";
+            mydbAccess.Query = "select product_sub_status from product_sub where id = '" + id + "'";
             mydbAccess.Select();
 
             if (mydbAccess.Status == 1)
@@ -528,7 +528,7 @@ namespace storeman
             else
             {
                 MessageBox.Show(mydbAccess.Message);
-            }       
+            }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -598,7 +598,7 @@ namespace storeman
                         label28.Text = id1;
 
                         label22.Text = productStatus;
-                        label23.Text = stockLeft;                   
+                        label23.Text = stockLeft;
 
                         label22.Show();
                         label23.Show();
@@ -606,7 +606,7 @@ namespace storeman
                         label19.Show();
                         label20.Show();
                         label21.Show();
-            
+
                         label27.Show();
 
                         checkBox4.Show();
@@ -623,7 +623,7 @@ namespace storeman
 
                         numericUpDown1.Value = Decimal.Parse(restockLevel);
                         numericUpDown1.Show();
-                     
+
                         numericUpDown2.Value = Decimal.Parse(currentPrice);
                         numericUpDown2.Show();
 
@@ -666,7 +666,7 @@ namespace storeman
 
                         textBox6.Text = name;
                         textBox6.Show();
-                    
+
                     }
                 }
 
@@ -804,7 +804,7 @@ namespace storeman
 
                 }
 
-                
+
             }
             else
             {
@@ -820,7 +820,7 @@ namespace storeman
 
                 }
             }
-           
+
         }
     }
- }
+}

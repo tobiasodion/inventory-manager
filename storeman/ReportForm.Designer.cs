@@ -381,6 +381,7 @@
             this.button2.TabIndex = 40;
             this.button2.Text = "Print ";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ReportForm
             // 

@@ -16,3 +16,5 @@ C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\obj\Debug\
 C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\obj\Debug\storeman.ReportForm.resources
 C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\obj\Debug\storeman.StockForm.resources
 C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\obj\Debug\storeman.POSForm.resources
+C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\bin\Debug\itextsharp.dll
+C:\Users\TOBI\Documents\Visual Studio 2015\Projects\storeman\storeman\bin\Debug\itextsharp.xml
