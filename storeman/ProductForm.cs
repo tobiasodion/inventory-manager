@@ -208,6 +208,11 @@ namespace storeman
                 listBox1.Show();
                 button8.Show();
 
+                button8.Enabled = false;
+                textBox6.Enabled = false;
+                numericUpDown1.Enabled = false;
+                numericUpDown2.Enabled = false;
+
                 string query1 = @"select * from product_sub where product_id = '" + id + "'";
                 mydbAccess.Query = query1;
                 mydbAccess.Select();
@@ -244,6 +249,8 @@ namespace storeman
                         button10.Show();
                     }
 
+                    button11.Hide();
+
                     label22.Hide();
                     label23.Hide();
                     label15.Hide();
@@ -253,8 +260,6 @@ namespace storeman
                     label27.Hide();
                     radioButton1.Hide();
                     radioButton2.Hide();
-                    checkBox2.Hide();
-                    checkBox3.Hide();
                     checkBox4.Hide();
 
                     numericUpDown1.Hide();
@@ -279,8 +284,6 @@ namespace storeman
                 label27.Hide();
                 radioButton1.Hide();
                 radioButton2.Hide();
-                checkBox2.Hide();
-                checkBox3.Hide();
                 checkBox4.Hide();
 
                 numericUpDown1.Hide();
@@ -337,6 +340,7 @@ namespace storeman
                         else
                         {
                             MessageBox.Show("Fill in Sub-Cat");
+                           comboBox2_SelectedIndexChanged(null, null);
                             textBox8.Clear();
                         }
                     }
@@ -406,7 +410,125 @@ namespace storeman
 
         private void button8_Click(object sender, EventArgs e)
         {
-           
+            int status;
+            string cName = label24.Text;
+            decimal cRestockLevel = Decimal.Parse(label25.Text);
+            decimal cPrice = Decimal.Parse(label26.Text);
+            int check = 1;
+            int id = Int32.Parse(label14.Text);
+
+            mydbAccess.Query = "select product_sub_status from product_sub where id = '"+id+"'";
+            mydbAccess.Select();
+
+            if (mydbAccess.Status == 1)
+            {
+                var result = mydbAccess.Result;
+                status = (int)result.Rows[0]["product_sub_status"];
+                //check if each control has valid input
+                if (textBox6.Text != "" && numericUpDown1.Value > 0 && numericUpDown2.Value > 0)
+                {
+                    //check if no change was made
+                    if (textBox6.Text != cName || numericUpDown1.Value != cRestockLevel || numericUpDown2.Value != cRestockLevel)
+                    {
+                        string nName = textBox6.Text;
+                        decimal nRestockLevel = numericUpDown1.Value;
+                        decimal nPrice = numericUpDown2.Value;
+
+                        //check restock level to set product status 
+                        if (nRestockLevel < Decimal.Parse(label23.Text))
+                        {
+                            //product in stock
+                            status = 1;
+                        }
+
+                        if (nRestockLevel == Decimal.Parse(label23.Text))
+                        {
+                            //product low stock
+                            status = 2;
+                        }
+
+
+                        //check to know if new price is greater or less than current price
+                        if (nPrice < cPrice)
+                        {
+                            //if new price is less than current price ask user if to proceed with the change
+                            //Get user response and proceed to proceed with insert operation
+                            //if response is no, check will be 0
+                            //else check remain 1
+                            DialogResult mydialogResult = MessageBox.Show("New price set is lower than current price. Do you want to proceed with update?", "WARNING!", MessageBoxButtons.YesNo);
+
+                            if (mydialogResult == DialogResult.No)
+                            {
+                                check = 0;
+                            }
+
+                            else if (mydialogResult == DialogResult.Yes)
+                            {
+                                check = 1;
+                            }
+
+                        }
+
+                        if (nPrice >= cPrice && check == 1)
+                        {
+                            mydbAccess.Query = @"update product_sub set product_sub_name = '" + nName + "', product_sub_restock_level ='"
+                                               + nRestockLevel + "',product_sub_price = '" + nPrice + "', product_sub_status = '"
+                                               + status + "' where id = '" + id + "'";
+                            mydbAccess.Insert();
+
+                            if (mydbAccess.Status == 1)
+                            {
+                                MessageBox.Show("Product update successful!");
+                                //lock record
+                                checkBox4.Checked = false;
+                                comboBox2_SelectedIndexChanged(null, null);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Product update NOT successful!");
+                                //refresh Page
+                                textBox6.Text = label24.Text;
+                                numericUpDown1.Value = Decimal.Parse(label25.Text);
+                                numericUpDown2.Value = Decimal.Parse(label26.Text);
+
+                                checkBox4.Checked = false;
+                            }
+                        }
+
+                        else
+                        {
+                            MessageBox.Show("Update not successful! Intended new price less than current price");
+                            textBox6.Text = label24.Text;
+                            numericUpDown1.Value = Decimal.Parse(label25.Text);
+                            numericUpDown2.Value = Decimal.Parse(label26.Text);
+
+                            checkBox4.Checked = false;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No Change was made to product. Edit the value you wish to change");
+
+                        checkBox4.Checked = false;
+                    }
+                }
+
+                else
+                {
+                    MessageBox.Show("Ensure all fields contain valid input");
+
+                    textBox6.Text = label24.Text;
+                    numericUpDown1.Value = Decimal.Parse(label25.Text);
+                    numericUpDown2.Value = Decimal.Parse(label26.Text);
+
+                    checkBox4.Checked = false;
+                }
+            }
+
+            else
+            {
+                MessageBox.Show(mydbAccess.Message);
+            }       
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -423,8 +545,6 @@ namespace storeman
             {
                 int id = (int)listBox1.SelectedValue;
 
-                checkBox2.Checked = false;
-                checkBox3.Checked = false;
                 checkBox4.Checked = false;
 
                 mydbAccess.Query = @"select r.product_sub_name,r.product_sub_restock_level,r.product_sales_unit, r.product_sub_price,r.product_id,r.status from
@@ -489,25 +609,31 @@ namespace storeman
             
                         label27.Show();
 
-                        checkBox2.Show();
-                        checkBox3.Show();
                         checkBox4.Show();
 
                         radioButton1.Hide();
                         radioButton2.Hide();
 
-                        numericUpDown1.Value = Decimal.Parse(restockLevel);
-                        numericUpDown1.Show();
-                        numericUpDown1.Enabled = false;
-
-                        numericUpDown2.Value = Decimal.Parse(currentPrice);
-                        numericUpDown2.Show();
-                        numericUpDown2.Enabled = false;
+                        label24.Text = name;
+                        label25.Text = restockLevel;
+                        label26.Text = currentPrice;
 
                         textBox6.Text = name;
                         textBox6.Show();
-                        textBox6.Enabled = false;
 
+                        numericUpDown1.Value = Decimal.Parse(restockLevel);
+                        numericUpDown1.Show();
+                     
+                        numericUpDown2.Value = Decimal.Parse(currentPrice);
+                        numericUpDown2.Show();
+
+                        button8.Show();
+                        button11.Hide();
+
+                        button8.Enabled = false;
+                        textBox6.Enabled = false;
+                        numericUpDown1.Enabled = false;
+                        numericUpDown2.Enabled = false;
                     }
 
 
@@ -529,18 +655,18 @@ namespace storeman
                         label19.Hide();
                         label20.Hide();
                         label21.Hide();
-
-                        checkBox2.Hide();
-                        checkBox3.Hide();
                         checkBox4.Hide();
 
                         numericUpDown1.Hide();
                         numericUpDown2.Hide();
+                        button8.Hide();
+                        button11.Hide();
 
-                        checkBox2.Show();
+                        label24.Text = name;
+
                         textBox6.Text = name;
                         textBox6.Show();
-                        textBox6.Enabled = false;
+                    
                     }
                 }
 
@@ -574,6 +700,7 @@ namespace storeman
             if (mydbAccess.Status == 1)
             {
                 MessageBox.Show("Product Delete Successful!");
+                comboBox2.Update();
             }
 
             else if (mydbAccess.Message != null)
@@ -586,6 +713,114 @@ namespace storeman
                 MessageBox.Show("Product Delete NOT Successful!");
             }
 
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox4.Checked == true)
+            {
+                button8.Enabled = true;
+                textBox6.Enabled = true;
+                numericUpDown1.Enabled = true;
+                numericUpDown2.Enabled = true;
+            }
+
+            else
+            {
+                button8.Enabled = false;
+                textBox6.Enabled = false;
+                numericUpDown1.Enabled = false;
+                numericUpDown2.Enabled = false;
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            //change text to delete
+            button11.Text = "Delete";
+            button11.Visible = true;
+            textBox6.Enabled = false;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            //change text to Update
+            button11.Text = "Update";
+            button11.Visible = true;
+            //enable input field
+            textBox6.Enabled = true;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string cName = label24.Text;
+            int id = Int32.Parse(label14.Text);
+            int cbIndex = comboBox2.SelectedIndex;
+
+            if (button11.Text == "Update")
+            {
+                //check if each control has valid input
+                if (textBox6.Text != "")
+                {
+                    //check if no change was made
+                    if (textBox6.Text != cName)
+                    {
+                        string nName = textBox6.Text;
+
+                        mydbAccess.Query = @"update product_sub set product_sub_name = '" + nName + "' where id = '" + id + "'";
+                        mydbAccess.Update();
+
+                        if (mydbAccess.Status == 1)
+                        {
+                            MessageBox.Show("Product update successful!");
+                            radioButton1.Checked = false;
+                            radioButton2.Checked = false;
+                            comboBox2_SelectedIndexChanged(null, null);
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Product update NOT successful!");
+                            //refresh Page
+                            textBox6.Text = label24.Text;
+                            radioButton1.Select();
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No Change was made to product. Edit the value you wish to change");
+
+                        radioButton1.Select();
+                    }
+                }
+
+                else
+                {
+                    MessageBox.Show("Ensure all fields contain valid input");
+
+                    textBox6.Text = label24.Text;
+                    radioButton1.Select();
+
+                }
+
+                
+            }
+            else
+            {
+                mydbAccess.Query = @"delete  from product_sub where id = '" + id + "'";
+                mydbAccess.Delete();
+
+                if (mydbAccess.Status == 1)
+                {
+                    MessageBox.Show("Product Delete successful!");
+                    radioButton1.Checked = false;
+                    radioButton2.Checked = false;
+                    comboBox2_SelectedIndexChanged(null, null);
+
+                }
+            }
+           
         }
     }
  }
