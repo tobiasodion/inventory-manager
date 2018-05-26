@@ -50,7 +50,7 @@ namespace storeman
 
             dbAccess mydbAccess2 = new dbAccess(conn);
 
-            if (radioButton2.Checked == true && (id1 == -1|| id == -1))
+            if (radioButton2.Checked == true && (id1 == -1 || id == -1))
             {
                 MessageBox.Show("Product and Product Sub Category must be selected!");
             }
@@ -66,25 +66,25 @@ namespace storeman
                 {
                     if (radioButton2.Checked == true)
                     {
-                   
-                            if (startDate.Equals(endDate))
-                            {
-                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
-                                              + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
 
-                                mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
-                                              + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
-                            }
+                        if (startDate.Equals(endDate))
+                        {
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
+                                          + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
 
-                            else
-                            {
-                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
-                                         + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
+                                          + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                        }
 
-                                mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
-                                         + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
-                            }
-                        
+                        else
+                        {
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
+                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+
+                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
+                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                        }
+
                     }
 
                     if (radioButton1.Checked == true)
@@ -128,7 +128,7 @@ namespace storeman
 
                             else
                             {
-                                MessageBox.Show("Showing Sales Report of " +comboBox1.Text+ ": " + comboBox3.Text + " for selected Period!");
+                                MessageBox.Show("Showing Sales Report of " + comboBox1.Text + ": " + comboBox3.Text + " for selected Period!");
                             }
 
                             float totalSales1 = float.Parse(totalSales);
@@ -164,51 +164,128 @@ namespace storeman
                     }
 
                 }
-            }   
-     }
-      
+            }
+        }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string storeName = ConfigurationManager.AppSettings["name"];
-            string address = ConfigurationManager.AppSettings["address"];
-            string contact = ConfigurationManager.AppSettings["contact"];
+            string message = null;
+            string message2 = null;
 
-            string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
-            string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
+            string user = Environment.UserName;
 
-            string totalSales = label10.Text;
-            string totalCost = label11.Text;
-            string Profit = label12.Text;
+            string path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS";
 
-            var doc1 = new Document();
+            //check if path exist
+            bool exist = Directory.Exists(path);
 
-            //has to be made variable could be placed in the configuration file
-            string path = "C:/Users/TOBI/Documents";
-            PdfWriter.GetInstance(doc1, new FileStream(path + "/Report.pdf", FileMode.Create));
+            if (!exist)
+            {
+                try
+                {
+                    // Try to create the directory.
+                    DirectoryInfo di = Directory.CreateDirectory(path);
+                }
+                catch (Exception ex)
+                {
+                    message = ex.Message;
+                }
+            }
 
-            //manipulate document
-            doc1.Open();
+            if (message == null)
+            {
+                string storeName = ConfigurationManager.AppSettings["name"];
+                string address = ConfigurationManager.AppSettings["address"];
+                string contact = ConfigurationManager.AppSettings["contact"];
 
-            doc1.Add(new Paragraph(storeName.ToUpper()));
-            doc1.Add(new Paragraph(address.ToUpper()));
-            doc1.Add(new Paragraph(contact.ToUpper()));
+                string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
+                string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
 
-            doc1.Add(new Paragraph(""));
+                string totalSales = label10.Text;
+                string totalCost = label11.Text;
+                string Profit = label12.Text;
 
-            doc1.Add(new Paragraph("SALES REPORT FROM " + startDate.ToUpper() + " - " + endDate.ToUpper()));
+                var doc1 = new Document();
 
-            doc1.Add(new Paragraph(""));
+                string dateTime = DateTime.Now.ToString("dd-MMM-yyyy_hh-mm-ss");
+                string docName = "/Report_" + dateTime + ".pdf";
 
-            doc1.Add(new Paragraph("TOTAL SALES: " + totalSales));
-            doc1.Add(new Paragraph(" TOTAL COST: " + totalCost));
-            doc1.Add(new Paragraph("     PROFIT: " + Profit));
+                try
+                {
+                    PdfWriter.GetInstance(doc1, new FileStream(path + docName, FileMode.Create));
 
-            doc1.Add(new Paragraph(""));
+                    //manipulate document
+                    //header section
 
-            doc1.Close();
+                    doc1.Open();
 
-            MessageBox.Show("Report Pdf saved to: " + path);
+                    iTextSharp.text.Font georgia = FontFactory.GetFont("georgia", 16f, iTextSharp.text.Font.BOLD);
+                    iTextSharp.text.Font georgia1 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.NORMAL);
+                    iTextSharp.text.Font georgia2 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.BOLD);
+                    iTextSharp.text.Font georgia3 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.ITALIC);
+
+                    Chunk c1 = new Chunk(storeName.ToUpper(), georgia);
+                    Phrase p1 = new Phrase(c1);
+
+                    Chunk c6 = new Chunk(address + ", " + contact, georgia3);
+                    Phrase p2 = new Phrase(c6);
+
+                    Chunk c2 = new Chunk("SALES REPORT FROM ", georgia1);
+                    Chunk c3 = new Chunk(startDate.ToUpper(), georgia2);
+                    Chunk c4 = new Chunk(" to ", georgia1);
+                    Chunk c5 = new Chunk(endDate.ToUpper(), georgia2);
+                    Phrase p3 = new Phrase();
+
+                    p3.Add(c2);
+                    p3.Add(c3);
+                    p3.Add(c4);
+                    p3.Add(c5);
+
+                    Paragraph pr1 = new Paragraph();
+                    Paragraph pr2 = new Paragraph();
+                    Paragraph pr3 = new Paragraph();
+
+                    pr1.Add(p1);
+                    pr2.Add(p2);
+                    pr3.Add(p3);
+
+                    pr2.SpacingAfter = 7f;
+                    pr3.SpacingAfter = 3f;
+
+                    pr1.Alignment = Element.ALIGN_CENTER;
+                    pr2.Alignment = Element.ALIGN_CENTER;
+                    pr3.Alignment = Element.ALIGN_CENTER;
+
+                    doc1.Add(pr1);
+                    doc1.Add(pr2);
+                    doc1.Add(pr3);
+
+                    //header section
+
+                    //Table of record 
+
+                    doc1.Close();
+
+                    MessageBox.Show("Report Pdf saved to: " + path);
+                }
+
+                catch (Exception ex)
+                {
+                    message2 = ex.Message;
+                }
+
+            }
+
+            else
+            {
+                MessageBox.Show(message);
+            }
+
+            if (message2 != null)
+            {
+                MessageBox.Show(message2);
+            }
         }
 
         //category change to populate product dropdown
@@ -223,7 +300,7 @@ namespace storeman
         {
             int id = (int)comboBox1.SelectedValue;
             ComboBox3Update(id);
-     
+
         }
 
         private void ComboBox2Update()
