@@ -35,6 +35,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.Category = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -132,6 +134,8 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.Blue;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.radioButton2);
+            this.panel2.Controls.Add(this.radioButton1);
             this.panel2.Controls.Add(this.Category);
             this.panel2.Controls.Add(this.comboBox3);
             this.panel2.Controls.Add(this.button1);
@@ -150,11 +154,39 @@
             this.panel2.Size = new System.Drawing.Size(346, 408);
             this.panel2.TabIndex = 22;
             // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton2.ForeColor = System.Drawing.Color.White;
+            this.radioButton2.Location = new System.Drawing.Point(8, 33);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(303, 20);
+            this.radioButton2.TabIndex = 44;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "View Sales Report for Particular Product";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1.ForeColor = System.Drawing.Color.White;
+            this.radioButton1.Location = new System.Drawing.Point(8, 7);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(271, 20);
+            this.radioButton1.TabIndex = 43;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "View Sales Report for ALL Products";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
             // Category
             // 
             this.Category.AutoSize = true;
             this.Category.ForeColor = System.Drawing.Color.White;
-            this.Category.Location = new System.Drawing.Point(34, 50);
+            this.Category.Location = new System.Drawing.Point(34, 73);
             this.Category.Name = "Category";
             this.Category.Size = new System.Drawing.Size(81, 20);
             this.Category.TabIndex = 42;
@@ -163,14 +195,16 @@
             // comboBox3
             // 
             this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox3.Enabled = false;
             this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.ItemHeight = 20;
-            this.comboBox3.Location = new System.Drawing.Point(121, 138);
+            this.comboBox3.Location = new System.Drawing.Point(121, 161);
             this.comboBox3.MaxDropDownItems = 6;
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(213, 28);
             this.comboBox3.TabIndex = 41;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // button1
             // 
@@ -188,7 +222,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(76, 261);
+            this.label9.Location = new System.Drawing.Point(76, 277);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(29, 20);
             this.label9.TabIndex = 39;
@@ -198,7 +232,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(55, 208);
+            this.label7.Location = new System.Drawing.Point(55, 224);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(50, 20);
             this.label7.TabIndex = 38;
@@ -208,25 +242,27 @@
             // 
             this.dateTimePicker2.CustomFormat = "dd-MMM-yyyy";
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker2.Location = new System.Drawing.Point(121, 256);
+            this.dateTimePicker2.Location = new System.Drawing.Point(121, 272);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(145, 26);
             this.dateTimePicker2.TabIndex = 37;
+            this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.CustomFormat = "dd-MMM-yyyy";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(121, 203);
+            this.dateTimePicker1.Location = new System.Drawing.Point(121, 219);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(145, 26);
             this.dateTimePicker1.TabIndex = 22;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(4, 141);
+            this.label8.Location = new System.Drawing.Point(4, 164);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(113, 20);
             this.label8.TabIndex = 35;
@@ -235,10 +271,11 @@
             // comboBox2
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Enabled = false;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.ItemHeight = 20;
-            this.comboBox2.Location = new System.Drawing.Point(121, 47);
+            this.comboBox2.Location = new System.Drawing.Point(121, 70);
             this.comboBox2.MaxDropDownItems = 6;
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(213, 28);
@@ -262,7 +299,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(44, 97);
+            this.label6.Location = new System.Drawing.Point(44, 120);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(71, 20);
             this.label6.TabIndex = 32;
@@ -271,10 +308,11 @@
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Enabled = false;
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.ItemHeight = 20;
-            this.comboBox1.Location = new System.Drawing.Point(121, 94);
+            this.comboBox1.Location = new System.Drawing.Point(121, 117);
             this.comboBox1.MaxDropDownItems = 6;
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(213, 28);
@@ -381,7 +419,6 @@
             this.button2.TabIndex = 40;
             this.button2.Text = "Print ";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ReportForm
             // 
@@ -438,6 +475,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label Category;
         private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
 

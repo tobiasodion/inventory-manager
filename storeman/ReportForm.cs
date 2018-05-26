@@ -30,56 +30,82 @@ namespace storeman
             userId = id;
             InitializeComponent();
 
-            ComboBox2Update();
-            ComboBox1Update(-1);
-            ComboBox3Update(-1);
+            radioButton1.Checked = true;
 
             dateTimePicker1.MaxDate = DateTime.Today;
             dateTimePicker2.MaxDate = DateTime.Today;
 
-            label10.Hide();
-            label11.Hide();
-            label12.Hide();
         }
 
-     
+
 
         private void button5_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("YES to View A Particular product sales report for specified Period. NO to view all product sales report for specified period.", "Report Scope", MessageBoxButtons.YesNo);
+            //obtain start and end date
+            DateTime startDate = dateTimePicker1.Value;
+            DateTime endDate = dateTimePicker2.Value;
 
-            if (dialogResult == DialogResult.No)
+            int id = (int)comboBox3.SelectedValue;
+            int id1 = (int)comboBox1.SelectedValue;
+
+            dbAccess mydbAccess2 = new dbAccess(conn);
+
+            if (radioButton2.Checked == true && (id1 == -1|| id == -1))
             {
-                dbAccess mydbAccess2 = new dbAccess(conn);
-                //obtain start and end date
-                DateTime startDate = dateTimePicker1.Value;
-                DateTime endDate = dateTimePicker2.Value;
+                MessageBox.Show("Product and Product Sub Category must be selected!");
+            }
 
+            else
+            {
                 if (startDate > endDate)
                 {
                     MessageBox.Show("FROM date must be earlier than TO Date!");
-
                 }
 
                 else
                 {
-                    
-                    if (startDate.Equals(endDate))
+                    if (radioButton2.Checked == true)
                     {
-                        mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
-                                      + startDate + "'";
+                   
+                            if (startDate.Equals(endDate))
+                            {
+                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
+                                              + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
 
-                        mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
-                                      + startDate + "'";
+                                mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
+                                              + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            }
+
+                            else
+                            {
+                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
+                                         + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+
+                                mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
+                                         + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            }
+                        
                     }
 
-                    else
+                    if (radioButton1.Checked == true)
                     {
-                        mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
-                                 + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
+                        if (startDate.Equals(endDate))
+                        {
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
+                                          + startDate + "'";
 
-                        mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
-                                 + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
+                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
+                                          + startDate + "'";
+                        }
+
+                        else
+                        {
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
+                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
+
+                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
+                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
+                        }
                     }
 
                     mydbAccess.Select();
@@ -95,7 +121,15 @@ namespace storeman
 
                         if (totalCost != "" && totalSales != "")
                         {
-                            MessageBox.Show("Showing ALL Transactions for selected Period!");
+                            if (radioButton1.Checked == true)
+                            {
+                                MessageBox.Show("Showing Sales Report of ALL Products for selected Period!");
+                            }
+
+                            else
+                            {
+                                MessageBox.Show("Showing Sales Report of " +comboBox1.Text+ ": " + comboBox3.Text + " for selected Period!");
+                            }
 
                             float totalSales1 = float.Parse(totalSales);
                             float totalCost1 = float.Parse(totalCost);
@@ -109,13 +143,7 @@ namespace storeman
                             label10.Show();
                             label11.Show();
                             label12.Show();
-
-                            ComboBox2Update();
-                            ComboBox1Update(-1);
-                            ComboBox3Update(-1);
-
                         }
-
                         else
                         {
                             MessageBox.Show("No sales record for specified Period");
@@ -127,142 +155,60 @@ namespace storeman
                                 label12.Hide();
                             }
 
-                            ComboBox2Update();
-                            ComboBox1Update(-1);
-                            ComboBox3Update(-1);
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("No sales record for specified Period");
-
-                        if (label10.Visible == true && label11.Visible == true && label11.Visible == true)
-                        {
-                            label10.Hide();
-                            label11.Hide();
-                            label12.Hide();
-                        }
-
-                        ComboBox2Update();
-                        ComboBox1Update(-1);
-                        ComboBox3Update(-1);
-                    }
-
-                }
-            }
-
-            else if (dialogResult == DialogResult.Yes)
-            {
-                int id = (int)comboBox1.SelectedValue;
-                int id1 = (int)comboBox3.SelectedValue;
-
-                if (id == -1 || id1 == -1)
-                {
-                    MessageBox.Show("Product and sub Category must be Selected!");
-                }
-                else
-                {
-
-                    dbAccess mydbAccess2 = new dbAccess(conn);
-                    //obtain start and end date
-                    DateTime startDate = dateTimePicker1.Value;
-                    DateTime endDate = dateTimePicker2.Value;
-
-                    if (startDate > endDate)
-                    {
-                        MessageBox.Show("FROM date must be earlier than TO Date!");
-
                     }
 
                     else
                     {
-                        
-                        if (startDate.Equals(endDate))
-                        {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "' AND product_sub_id = '"+id1+"' AND product_id = '"+id+"'";
-
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "' AND product_sub_id = '" + id1 + "' AND product_id = '" + id + "'";
-                        }
-
-                        else
-                        {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id1 + "' AND product_id = '" + id + "'";
-
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id1 + "' AND product_id = '" + id + "'";
-                        }
-
-                        mydbAccess.Select();
-                        mydbAccess2.Select();
-
-                        if (mydbAccess.Status == 1 && mydbAccess2.Status == 1)
-                        {
-                            var result = mydbAccess.Result;
-                            var result2 = mydbAccess2.Result;
-
-                            string totalSales = result.Rows[0]["total_sales"].ToString();
-                            string totalCost = result2.Rows[0]["total_cost"].ToString();
-
-                            if (totalCost != "" && totalSales != "")
-                            {
-                                MessageBox.Show("Showing Sales Report for " + comboBox1.Text + ": " + comboBox3.Text + " for selected Period!");
-
-                                float totalSales1 = float.Parse(totalSales);
-                                float totalCost1 = float.Parse(totalCost);
-
-                                float profit = totalSales1 - totalCost1;
-
-                                label10.Text = totalSales1.ToString("0.00");
-                                label11.Text = totalCost1.ToString("0.00");
-                                label12.Text = profit.ToString("0.00");
-
-                                label10.Show();
-                                label11.Show();
-                                label12.Show();
-                            }
-
-                            else
-                            {
-                                MessageBox.Show("No sales record for specified Period");
-
-                                if(label10.Visible == true && label11.Visible == true && label11.Visible == true)
-                                {
-                                    label10.Hide();
-                                    label11.Hide();
-                                    label12.Hide();
-                                }
-                               
-
-                                ComboBox2Update();
-                                ComboBox1Update(-1);
-                                ComboBox3Update(-1);
-                            }
-                        }
-
-                        else
-                        {
-                            MessageBox.Show("No sales record for specified Period");
-
-                            if (label10.Visible == true && label11.Visible == true && label11.Visible == true)
-                            {
-                                label10.Hide();
-                                label11.Hide();
-                                label12.Hide();
-                            }
-
-                            ComboBox2Update();
-                            ComboBox1Update(-1);
-                            ComboBox3Update(-1);
-                        }
-
+                        MessageBox.Show(mydbAccess.Message + mydbAccess2.Message);
                     }
 
                 }
-            }
-         
+            }   
+     }
+      
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string storeName = ConfigurationManager.AppSettings["name"];
+            string address = ConfigurationManager.AppSettings["address"];
+            string contact = ConfigurationManager.AppSettings["contact"];
+
+            string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
+            string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
+
+            string totalSales = label10.Text;
+            string totalCost = label11.Text;
+            string Profit = label12.Text;
+
+            var doc1 = new Document();
+
+            //has to be made variable could be placed in the configuration file
+            string path = "C:/Users/TOBI/Documents";
+            PdfWriter.GetInstance(doc1, new FileStream(path + "/Report.pdf", FileMode.Create));
+
+            //manipulate document
+            doc1.Open();
+
+            doc1.Add(new Paragraph(storeName.ToUpper()));
+            doc1.Add(new Paragraph(address.ToUpper()));
+            doc1.Add(new Paragraph(contact.ToUpper()));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Add(new Paragraph("SALES REPORT FROM " + startDate.ToUpper() + " - " + endDate.ToUpper()));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Add(new Paragraph("TOTAL SALES: " + totalSales));
+            doc1.Add(new Paragraph(" TOTAL COST: " + totalCost));
+            doc1.Add(new Paragraph("     PROFIT: " + Profit));
+
+            doc1.Add(new Paragraph(""));
+
+            doc1.Close();
+
+            MessageBox.Show("Report Pdf saved to: " + path);
         }
 
         //category change to populate product dropdown
@@ -270,7 +216,6 @@ namespace storeman
         {
             int id = (int)comboBox2.SelectedValue;
             ComboBox1Update(id);
-
         }
 
         //product change to populate product category dropdown
@@ -278,6 +223,7 @@ namespace storeman
         {
             int id = (int)comboBox1.SelectedValue;
             ComboBox3Update(id);
+     
         }
 
         private void ComboBox2Update()
@@ -297,6 +243,10 @@ namespace storeman
                 comboBox2.ValueMember = "id";
                 comboBox2.DisplayMember = "product_category_name";
                 comboBox2.DataSource = result;
+
+                label10.Hide();
+                label11.Hide();
+                label12.Hide();
             }
         }
 
@@ -329,6 +279,10 @@ namespace storeman
                 comboBox1.ValueMember = "id";
                 comboBox1.DisplayMember = "product_full_name";
                 comboBox1.DataSource = result;
+
+                label10.Hide();
+                label11.Hide();
+                label12.Hide();
             }
         }
 
@@ -360,6 +314,10 @@ namespace storeman
                 comboBox3.ValueMember = "id";
                 comboBox3.DisplayMember = "product_sub_name";
                 comboBox3.DataSource = result;
+
+                label10.Hide();
+                label11.Hide();
+                label12.Hide();
             }
         }
 
@@ -378,47 +336,47 @@ namespace storeman
             form3.Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            string storeName = ConfigurationManager.AppSettings["name"];
-            string address = ConfigurationManager.AppSettings["address"];
-            string contact = ConfigurationManager.AppSettings["contact"];
+            comboBox1.Enabled = true;
+            comboBox2.Enabled = true;
+            comboBox3.Enabled = true;
 
-            string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
-            string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+        }
 
-            string totalSales = label10.Text;
-            string totalCost = label11.Text;
-            string Profit = label12.Text;
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            ComboBox2Update();
+            ComboBox1Update(-1);
+            ComboBox3Update(-1);
 
-            var doc1 = new Document();
+            comboBox1.Enabled = false;
+            comboBox2.Enabled = false;
+            comboBox3.Enabled = false;
+        }
 
-            //has to be made variable could be placed in the configuration file
-            string path = "C:/Users/TOBI/Documents";
-            PdfWriter.GetInstance(doc1, new FileStream(path + "/Report.pdf", FileMode.Create));
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+        }
 
-            //manipulate document
-            doc1.Open();
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+        }
 
-            doc1.Add(new Paragraph(storeName.ToUpper()));
-            doc1.Add(new Paragraph(address.ToUpper()));
-            doc1.Add(new Paragraph(contact.ToUpper()));
-
-            doc1.Add(new Paragraph(""));
-
-            doc1.Add(new Paragraph("SALES REPORT FROM " +startDate.ToUpper()+ " - " + endDate.ToUpper() ));
-
-            doc1.Add(new Paragraph(""));
-
-            doc1.Add(new Paragraph("TOTAL SALES: " + totalSales));
-            doc1.Add(new Paragraph(" TOTAL COST: " + totalCost));
-            doc1.Add(new Paragraph("     PROFIT: " + Profit));
-
-            doc1.Add(new Paragraph(""));
-
-            doc1.Close();
-
-            MessageBox.Show("Report Pdf saved to: " + path );
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
         }
     }
 }
