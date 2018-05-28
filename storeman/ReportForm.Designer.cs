@@ -413,11 +413,11 @@
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(244, 343);
+            this.button2.Location = new System.Drawing.Point(217, 343);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(110, 31);
+            this.button2.Size = new System.Drawing.Size(137, 31);
             this.button2.TabIndex = 40;
-            this.button2.Text = "Print ";
+            this.button2.Text = "Print Details";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 

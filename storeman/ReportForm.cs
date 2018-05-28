@@ -170,121 +170,216 @@ namespace storeman
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string message = null;
-            string message2 = null;
-
-            string user = Environment.UserName;
-
-            string path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS";
-
-            //check if path exist
-            bool exist = Directory.Exists(path);
-
-            if (!exist)
+            if (label10.Visible == true)
             {
-                try
+                int id = (int)comboBox3.SelectedValue;
+
+                DateTime startDate = dateTimePicker1.Value;
+                DateTime endDate = dateTimePicker2.Value;
+
+                string message = null;
+                string message2 = null;
+
+                string user = Environment.UserName;
+
+                string path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS";
+
+                //check if path exist
+                bool exist = Directory.Exists(path);
+
+                if (!exist)
                 {
-                    // Try to create the directory.
-                    DirectoryInfo di = Directory.CreateDirectory(path);
+                    try
+                    {
+                        // Try to create the directory.
+                        DirectoryInfo di = Directory.CreateDirectory(path);
+                    }
+                    catch (Exception ex)
+                    {
+                        message = ex.Message;
+                    }
                 }
-                catch (Exception ex)
+
+                if (message == null)
                 {
-                    message = ex.Message;
+                    string storeName = ConfigurationManager.AppSettings["name"];
+                    string address = ConfigurationManager.AppSettings["address"];
+                    string contact = ConfigurationManager.AppSettings["contact"];
+
+                    string totalSales = label10.Text;
+                    string totalCost = label11.Text;
+                    string Profit = label12.Text;
+
+                    var doc1 = new Document();
+
+                    string dateTime = DateTime.Now.ToString("dd-MMM-yyyy_hh-mm-ss");
+                    string docName = "/Report_" + dateTime + ".pdf";
+
+                    try
+                    {
+                        PdfWriter.GetInstance(doc1, new FileStream(path + docName, FileMode.Create));
+
+                        //manipulate document
+                        //header section
+
+                        doc1.Open();
+
+                        iTextSharp.text.Font georgia = FontFactory.GetFont("georgia", 16f, iTextSharp.text.Font.BOLD);
+                        iTextSharp.text.Font georgia1 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.NORMAL);
+                        iTextSharp.text.Font georgia2 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.BOLD);
+                        iTextSharp.text.Font georgia3 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.ITALIC);
+
+                        Chunk c1 = new Chunk(storeName.ToUpper(), georgia);
+                        Phrase p1 = new Phrase(c1);
+
+                        Chunk c6 = new Chunk(address + ", " + contact, georgia3);
+                        Phrase p2 = new Phrase(c6);
+
+                        Chunk c2 = new Chunk("SALES REPORT FROM ", georgia1);
+                        Chunk c3 = new Chunk(startDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
+                        Chunk c4 = new Chunk(" to ", georgia1);
+                        Chunk c5 = new Chunk(endDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
+                        Phrase p3 = new Phrase();
+
+                        p3.Add(c2);
+                        p3.Add(c3);
+                        p3.Add(c4);
+                        p3.Add(c5);
+
+                        Paragraph pr1 = new Paragraph();
+                        Paragraph pr2 = new Paragraph();
+                        Paragraph pr3 = new Paragraph();
+
+                        pr1.Add(p1);
+                        pr2.Add(p2);
+                        pr3.Add(p3);
+
+                        pr2.SpacingAfter = 7f;
+                        pr3.SpacingAfter = 3f;
+
+                        pr1.Alignment = Element.ALIGN_CENTER;
+                        pr2.Alignment = Element.ALIGN_CENTER;
+                        pr3.Alignment = Element.ALIGN_CENTER;
+
+                        doc1.Add(pr1);
+                        doc1.Add(pr2);
+                        doc1.Add(pr3);
+
+                        //header section
+
+                       
+                         //Table of record 
+                        PdfPTable table = new PdfPTable(9);
+
+                        //actual width of table in points
+                        //units in pts 1inch = 72pts printing terms
+                        table.TotalWidth = 504f;
+
+                        //fix the absolute width of the table
+                        table.LockedWidth = true;
+
+                        //relative col widths in proportions - 1/3 and 2/3
+                        float[] widths = new float[] { 3f, 7f, 11.5f, 11.5f, 3.5f, 4.5f, 4.5f, 5.5f, 5.5f };
+
+                        table.SetWidths(widths);
+                        table.HorizontalAlignment = 0;
+                    
+                        //leave a gap before and after the table
+                        table.SpacingBefore = 20f;
+                        table.SpacingAfter = 30f;
+
+
+                        PdfPCell cell = new PdfPCell();
+                        cell.Colspan = 9;
+                        cell.Border = 0;
+
+                        cell.HorizontalAlignment = 1;
+                        table.AddCell("S/N");
+                        table.AddCell("DATE");
+                        table.AddCell("PRODUCT");
+                        table.AddCell("SUBCATEGORY");
+                        table.AddCell("QTY");
+                        table.AddCell("CP");
+                        table.AddCell("SP ");
+                        table.AddCell("TOTAL COST");
+                        table.AddCell("TOTAL SALES");
+
+                        if (radioButton1.Checked == true)
+                        {
+                            mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
+                                               r.sales_quantity* product_sub_price as total_sales
+                                               from(select ps.id, CAST(s.sales_date AS DATE) as sales_date, 
+                                               p.product_full_name,ps.product_sub_name, s.sales_quantity,
+                                               s.unit_cost_price, ps.product_sub_price from sales s
+                                               inner join product_sub ps on ps.id = s.product_sub_id
+                                               inner join product p on p.id = ps.product_id) as r where 
+                                               r.sales_date >= '"
+                                               + startDate + "' AND r.sales_date <= '" + endDate
+                                               + "' order by r.product_sub_name asc";
+
+                            mydbAccess.Select();
+                        }
+
+                        if (radioButton2.Checked == true)
+                        {
+                            mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
+                                               r.sales_quantity* product_sub_price as total_sales
+                                               from(select ps.id, CAST(s.sales_date AS DATE) as sales_date, 
+                                               p.product_full_name,ps.product_sub_name, s.sales_quantity,
+                                               s.unit_cost_price, ps.product_sub_price from sales s
+                                               inner join product_sub ps on ps.id = s.product_sub_id
+                                               inner join product p on p.id = ps.product_id) as r where 
+                                               r.sales_date >= '"
+                                              + startDate + "' AND r.sales_date <= '" + endDate
+                                              + "' AND r.id = '" + id + "'order by r.sales_date asc";
+
+                            mydbAccess.Select();
+                        }
+
+                        if (mydbAccess.Status == 1)
+                        {
+                            var result = mydbAccess.Result;
+
+                            for (int i = 0; i < result.Rows.Count; i++)
+                            {
+                                table.AddCell(result.Rows[i]["id"].ToString());
+                                table.AddCell(result.Rows[i]["sales_date"].ToString().Replace("12:00:00 AM", ""));
+                                table.AddCell(result.Rows[i]["product_full_name"].ToString());
+                                table.AddCell(result.Rows[i]["product_sub_name"].ToString());
+                                table.AddCell(result.Rows[i]["sales_quantity"].ToString());
+                                table.AddCell(result.Rows[i]["unit_cost_price"].ToString());
+                                table.AddCell(result.Rows[i]["product_sub_price"].ToString());
+                                table.AddCell(result.Rows[i]["total_cost"].ToString());
+                                table.AddCell(result.Rows[i]["total_sales"].ToString());
+                            }     
+                        }
+
+                        doc1.Add(table);
+                        doc1.Close();
+
+                        MessageBox.Show("Report Pdf saved to: " + path);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        message2 = ex.Message;
+                    }
+
+                }
+
+                else
+                {
+                    MessageBox.Show(message);
+                }
+
+                if (message2 != null)
+                {
+                    MessageBox.Show(message2);
                 }
             }
-
-            if (message == null)
-            {
-                string storeName = ConfigurationManager.AppSettings["name"];
-                string address = ConfigurationManager.AppSettings["address"];
-                string contact = ConfigurationManager.AppSettings["contact"];
-
-                string startDate = dateTimePicker1.Value.ToString("dd-MMM-yyyy");
-                string endDate = dateTimePicker2.Value.ToString("dd-MMM-yyyy");
-
-                string totalSales = label10.Text;
-                string totalCost = label11.Text;
-                string Profit = label12.Text;
-
-                var doc1 = new Document();
-
-                string dateTime = DateTime.Now.ToString("dd-MMM-yyyy_hh-mm-ss");
-                string docName = "/Report_" + dateTime + ".pdf";
-
-                try
-                {
-                    PdfWriter.GetInstance(doc1, new FileStream(path + docName, FileMode.Create));
-
-                    //manipulate document
-                    //header section
-
-                    doc1.Open();
-
-                    iTextSharp.text.Font georgia = FontFactory.GetFont("georgia", 16f, iTextSharp.text.Font.BOLD);
-                    iTextSharp.text.Font georgia1 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.NORMAL);
-                    iTextSharp.text.Font georgia2 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.BOLD);
-                    iTextSharp.text.Font georgia3 = FontFactory.GetFont("georgia", 12f, iTextSharp.text.Font.ITALIC);
-
-                    Chunk c1 = new Chunk(storeName.ToUpper(), georgia);
-                    Phrase p1 = new Phrase(c1);
-
-                    Chunk c6 = new Chunk(address + ", " + contact, georgia3);
-                    Phrase p2 = new Phrase(c6);
-
-                    Chunk c2 = new Chunk("SALES REPORT FROM ", georgia1);
-                    Chunk c3 = new Chunk(startDate.ToUpper(), georgia2);
-                    Chunk c4 = new Chunk(" to ", georgia1);
-                    Chunk c5 = new Chunk(endDate.ToUpper(), georgia2);
-                    Phrase p3 = new Phrase();
-
-                    p3.Add(c2);
-                    p3.Add(c3);
-                    p3.Add(c4);
-                    p3.Add(c5);
-
-                    Paragraph pr1 = new Paragraph();
-                    Paragraph pr2 = new Paragraph();
-                    Paragraph pr3 = new Paragraph();
-
-                    pr1.Add(p1);
-                    pr2.Add(p2);
-                    pr3.Add(p3);
-
-                    pr2.SpacingAfter = 7f;
-                    pr3.SpacingAfter = 3f;
-
-                    pr1.Alignment = Element.ALIGN_CENTER;
-                    pr2.Alignment = Element.ALIGN_CENTER;
-                    pr3.Alignment = Element.ALIGN_CENTER;
-
-                    doc1.Add(pr1);
-                    doc1.Add(pr2);
-                    doc1.Add(pr3);
-
-                    //header section
-
-                    //Table of record 
-
-                    doc1.Close();
-
-                    MessageBox.Show("Report Pdf saved to: " + path);
-                }
-
-                catch (Exception ex)
-                {
-                    message2 = ex.Message;
-                }
-
-            }
-
             else
             {
-                MessageBox.Show(message);
-            }
-
-            if (message2 != null)
-            {
-                MessageBox.Show(message2);
+                MessageBox.Show("View Sales Report before Printing Details!");
             }
         }
 
