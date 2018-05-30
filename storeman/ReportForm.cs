@@ -20,6 +20,8 @@ namespace storeman
         public string firstname;
         public int userId;
 
+        int category; //determines report category sales or stock
+
         static string conn = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
         dbAccess mydbAccess = new dbAccess(conn);
 
@@ -31,15 +33,19 @@ namespace storeman
             InitializeComponent();
 
             radioButton1.Checked = true;
+            radioButton3.Checked = true;
 
             dateTimePicker1.MaxDate = DateTime.Today;
             dateTimePicker2.MaxDate = DateTime.Today;
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Report(category);
+        }
 
-
-        private void button5_Click(object sender, EventArgs e)
+        private void Report(int category)
         {
             //obtain start and end date
             DateTime startDate = dateTimePicker1.Value;
@@ -64,71 +70,105 @@ namespace storeman
 
                 else
                 {
+                    //report for particular product
                     if (radioButton2.Checked == true)
                     {
-
-                        if (startDate.Equals(endDate))
                         {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            if (startDate.Equals(endDate) && category == 1)
+                            {
+                                //report for particular product for one day
+                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales,SUM(sales_quantity * unit_cost_price) 
+                                                   as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
+                                                    + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            }
 
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            else if ((startDate < endDate) && category == 1)
+                            {
+                                //report for a particular product for a period of time
+                                mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales,SUM(sales_quantity * unit_cost_price)            
+                                                  as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
+                                               + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            }
+
+                            else
+                            {
+                                //stock report for particular product
+                                mydbAccess.Query = @"select  sum(r.stock_left*r.product_sub_price) as total_sales,
+                                                   sum(r.stock_left*r.stock_unit_cost_price) as total_cost 
+                                                   from (select st.* , ps.product_sub_price from stock_tracker st
+                                                   inner join product_sub ps on st.product_sub_id = ps.id) as r 
+                                                   where product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
+                            }
+
                         }
-
-                        else
-                        {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
-
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "' AND product_sub_id = '" + id + "' AND product_id = '" + id1 + "'";
-                        }
-
                     }
 
+                    //report for all product
                     if (radioButton1.Checked == true)
                     {
-                        if (startDate.Equals(endDate))
+                        if (startDate.Equals(endDate) && category == 1)
                         {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "'";
+                            //report for all product for one day
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales,
+                                               SUM(sales_quantity * unit_cost_price) as total_cost 
+                                                from sales WHERE CAST(sales_date AS DATE) = '"
+                                               + startDate + "'";
+                        }
 
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) = '"
-                                          + startDate + "'";
+                        else if ((startDate < endDate) && category == 1)
+                        {
+                            //report for all product for a period of time
+                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales,
+                                               SUM(sales_quantity * unit_cost_price) as total_cost
+                                              from sales WHERE CAST(sales_date AS DATE) >= '"
+                                              + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
                         }
 
                         else
                         {
-                            mydbAccess.Query = @"SELECT SUM(sales_quantity * sales_price_unit) as total_sales from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
-
-                            mydbAccess2.Query = @"SELECT SUM(sales_quantity * unit_cost_price) as total_cost from sales WHERE CAST(sales_date AS DATE) >= '"
-                                     + startDate + "' AND CAST(sales_date AS DATE) <= '" + endDate + "'";
+                            //stock report for particular product
+                            mydbAccess.Query = @"select sum(r.stock_left*r.product_sub_price) as total_sales,
+                                              sum(r.stock_left*r.stock_unit_cost_price) as total_cost 
+                                               from (select st.* , ps.product_sub_price from stock_tracker st
+                                               inner join product_sub ps on st.product_sub_id = ps.id) as r";
                         }
                     }
 
                     mydbAccess.Select();
-                    mydbAccess2.Select();
 
-                    if (mydbAccess.Status == 1 && mydbAccess2.Status == 1)
+                    if (mydbAccess.Status == 1)
                     {
                         var result = mydbAccess.Result;
-                        var result2 = mydbAccess2.Result;
 
                         string totalSales = result.Rows[0]["total_sales"].ToString();
-                        string totalCost = result2.Rows[0]["total_cost"].ToString();
+                        string totalCost = result.Rows[0]["total_cost"].ToString();
 
                         if (totalCost != "" && totalSales != "")
                         {
                             if (radioButton1.Checked == true)
                             {
-                                MessageBox.Show("Showing Sales Report of ALL Products for selected Period!");
+                                if (category == 1)
+                                {
+                                    MessageBox.Show("Showing Sales Report of ALL Products for selected Period!");
+                                }
+
+                                if (category == 2)
+                                {
+                                    MessageBox.Show("Showing Stock Report of ALL Products");
+                                }
                             }
 
                             else
                             {
-                                MessageBox.Show("Showing Sales Report of " + comboBox1.Text + ": " + comboBox3.Text + " for selected Period!");
+                                if (category == 1)
+                                {
+                                    MessageBox.Show("Showing Sales Report of " + comboBox1.Text + ": " + comboBox3.Text + " for selected Period!");
+                                }
+
+                                else
+                                {
+                                    MessageBox.Show("Showing Stock Report of " + comboBox1.Text + ": " + comboBox3.Text);
+                                }
                             }
 
                             float totalSales1 = float.Parse(totalSales);
@@ -143,16 +183,42 @@ namespace storeman
                             label10.Show();
                             label11.Show();
                             label12.Show();
+
+                            if(radioButton2.Checked == true && radioButton4.Checked == true)
+                            {
+                                mydbAccess.Query = @"select sum(stock_left) as total_stock_left from stock_tracker 
+                                                   where product_sub_id = '"+id+"'";
+                                mydbAccess.Select();
+
+                                if (mydbAccess.Status == 1)
+                                {
+                                    var result2 = mydbAccess.Result;
+                                    label14.Text = result2.Rows[0]["total_stock_left"].ToString();
+                                    label13.Show();
+                                    label14.Show();
+                                }                    
+                            }
                         }
+
                         else
                         {
-                            MessageBox.Show("No sales record for specified Period");
+                            if (category == 1)
+                            {
+                                MessageBox.Show("No sales record for specified Period");
+                            }
+
+                            if (category == 2)
+                            {
+                                MessageBox.Show("Product out of stock");
+                            }
 
                             if (label10.Visible == true && label11.Visible == true && label11.Visible == true)
                             {
                                 label10.Hide();
                                 label11.Hide();
                                 label12.Hide();
+                                label13.Hide();
+                                label14.Hide();
                             }
 
                         }
@@ -167,7 +233,6 @@ namespace storeman
             }
         }
 
-
         private void button2_Click(object sender, EventArgs e)
         {
             if (label10.Visible == true)
@@ -181,8 +246,19 @@ namespace storeman
                 string message2 = null;
 
                 string user = Environment.UserName;
+                string path;
+                string docName;
 
-                string path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS";
+                if (category == 1)
+                {
+                    path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS\SALES";
+                }
+
+                else
+                {
+                    path = @"C:\Users\" + user + @"\Documents\STOREMAN_REPORTS\STOCK";
+                }
+               
 
                 //check if path exist
                 bool exist = Directory.Exists(path);
@@ -213,7 +289,15 @@ namespace storeman
                     var doc1 = new Document();
 
                     string dateTime = DateTime.Now.ToString("dd-MMM-yyyy_hh-mm-ss");
-                    string docName = "/Report_" + dateTime + ".pdf";
+                    if(category == 1)
+                    {
+                        docName = "/Sales_Report_" + dateTime + ".pdf";
+                    }
+
+                    else
+                    {
+                        docName = "/Stock_Report_" + dateTime + ".pdf";
+                    }
 
                     try
                     {
@@ -235,16 +319,26 @@ namespace storeman
                         Chunk c6 = new Chunk(address + ", " + contact, georgia3);
                         Phrase p2 = new Phrase(c6);
 
-                        Chunk c2 = new Chunk("SALES REPORT FROM ", georgia1);
-                        Chunk c3 = new Chunk(startDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
-                        Chunk c4 = new Chunk(" to ", georgia1);
-                        Chunk c5 = new Chunk(endDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
                         Phrase p3 = new Phrase();
 
-                        p3.Add(c2);
-                        p3.Add(c3);
-                        p3.Add(c4);
-                        p3.Add(c5);
+                        if (category == 1)
+                        {
+                            Chunk c2 = new Chunk("SALES REPORT FROM ", georgia1);
+                            Chunk c3 = new Chunk(startDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
+                            Chunk c4 = new Chunk(" to ", georgia1);
+                            Chunk c5 = new Chunk(endDate.ToString("dd-MMM-yyyy").ToUpper(), georgia2);
+
+                            p3.Add(c2);
+                            p3.Add(c3);
+                            p3.Add(c4);
+                            p3.Add(c5);
+                        }
+
+                        else
+                        {
+                            Chunk c2 = new Chunk("CURRENT STOCK REPORT", georgia2);
+                            p3.Add(c2);
+                        }
 
                         Paragraph pr1 = new Paragraph();
                         Paragraph pr2 = new Paragraph();
@@ -266,24 +360,38 @@ namespace storeman
                         doc1.Add(pr3);
 
                         //header section
+                        int columns;
+                        float[] widths;
 
-                       
-                         //Table of record 
-                        PdfPTable table = new PdfPTable(9);
+                        if (category == 1)
+                        {
+                            columns = 9;
+                            
+                            //relative col widths in proportions - 1/3 and 2/3
+                            widths = new float[] { 3f, 7.5f, 13f, 13f, 4f, 6f, 6f, 6.5f, 6.5f };
+                        }
+
+                        else
+                        {
+                            columns = 8;
+                            //relative col widths in proportions - 1/3 and 2/3
+                            widths = new float[] { 3f, 13f, 13f, 4f, 6f, 6f, 6.5f, 6.5f };
+                        }
+
+                        //Table of record 
+                        PdfPTable table = new PdfPTable(columns);
 
                         //actual width of table in points
                         //units in pts 1inch = 72pts printing terms
-                        table.TotalWidth = 504f;
+                        table.TotalWidth = 530f;
 
                         //fix the absolute width of the table
                         table.LockedWidth = true;
 
-                        //relative col widths in proportions - 1/3 and 2/3
-                        float[] widths = new float[] { 3f, 7f, 11.5f, 11.5f, 3.5f, 4.5f, 4.5f, 5.5f, 5.5f };
-
+                      
                         table.SetWidths(widths);
                         table.HorizontalAlignment = 0;
-                    
+
                         //leave a gap before and after the table
                         table.SpacingBefore = 20f;
                         table.SpacingAfter = 30f;
@@ -292,21 +400,39 @@ namespace storeman
                         PdfPCell cell = new PdfPCell();
                         cell.Colspan = 9;
                         cell.Border = 0;
-
                         cell.HorizontalAlignment = 1;
-                        table.AddCell("S/N");
-                        table.AddCell("DATE");
-                        table.AddCell("PRODUCT");
-                        table.AddCell("SUBCATEGORY");
-                        table.AddCell("QTY");
-                        table.AddCell("CP");
-                        table.AddCell("SP ");
-                        table.AddCell("TOTAL COST");
-                        table.AddCell("TOTAL SALES");
+
+                        if (category == 1)
+                        {
+                            table.AddCell("S/N");
+                            table.AddCell("DATE");
+                            table.AddCell("PRODUCT");
+                            table.AddCell("SUBCATEGORY");
+                            table.AddCell("QTY");
+                            table.AddCell("CP");
+                            table.AddCell("SP ");
+                            table.AddCell("TOTAL COST");
+                            table.AddCell("TOTAL SALES");
+                        }
+
+                        else
+                        {
+                            table.AddCell("S/N");
+                            table.AddCell("PRODUCT");
+                            table.AddCell("SUBCATEGORY");
+                            table.AddCell("QTY");
+                            table.AddCell("SC");
+                            table.AddCell("SP ");
+                            table.AddCell("TOTAL COST");
+                            table.AddCell("TOTAL WORTH");
+                        }
+                        
 
                         if (radioButton1.Checked == true)
                         {
-                            mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
+                            if (category == 1)
+                            {
+                                mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
                                                r.sales_quantity* product_sub_price as total_sales
                                                from(select ps.id, CAST(s.sales_date AS DATE) as sales_date, 
                                                p.product_full_name,ps.product_sub_name, s.sales_quantity,
@@ -314,15 +440,33 @@ namespace storeman
                                                inner join product_sub ps on ps.id = s.product_sub_id
                                                inner join product p on p.id = ps.product_id) as r where 
                                                r.sales_date >= '"
-                                               + startDate + "' AND r.sales_date <= '" + endDate
-                                               + "' order by r.product_sub_name asc";
+                                             + startDate + "' AND r.sales_date <= '" + endDate
+                                             + "' order by r.product_sub_name asc";
+                            }
 
+                            else
+                            {
+                                mydbAccess.Query = @"select r.id, r.product_full_name, r.product_sub_name,
+                                                   r.stock_left,r.stock_unit_cost_price, r.product_sub_price, 
+                                                   r.stock_left*r.stock_unit_cost_price as total_cost,
+                                                   r.stock_left * r.product_sub_price as total_sales
+                                                   from (select ps.id, st.product_sub_id, st.product_id, 
+                                                   p.product_full_name, ps.product_sub_name, st.stock_left, 
+                                                   st.stock_unit_cost_price, ps.product_sub_price
+                                                   from stock_tracker st
+                                                   inner join product_sub ps on st.product_sub_id = ps.id
+                                                   inner join product p on st.product_id = p.id ) as r 
+                                                   order by r.product_sub_name asc";
+                            }
+                          
                             mydbAccess.Select();
                         }
 
-                        if (radioButton2.Checked == true)
+                        else if (radioButton2.Checked == true)
                         {
-                            mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
+                            if(category == 1)
+                            {
+                                mydbAccess.Query = @"select r.*,r.sales_quantity*r.unit_cost_price as total_cost,
                                                r.sales_quantity* product_sub_price as total_sales
                                                from(select ps.id, CAST(s.sales_date AS DATE) as sales_date, 
                                                p.product_full_name,ps.product_sub_name, s.sales_quantity,
@@ -330,29 +474,98 @@ namespace storeman
                                                inner join product_sub ps on ps.id = s.product_sub_id
                                                inner join product p on p.id = ps.product_id) as r where 
                                                r.sales_date >= '"
-                                              + startDate + "' AND r.sales_date <= '" + endDate
-                                              + "' AND r.id = '" + id + "'order by r.sales_date asc";
-
+                                            + startDate + "' AND r.sales_date <= '" + endDate
+                                            + "' AND r.id = '" + id + "'order by r.sales_date asc";
+                            }
+                            else
+                            {
+                                mydbAccess.Query = @"select r.id, r.product_full_name, r.product_sub_name,
+                                                   r.stock_left,r.stock_unit_cost_price, r.product_sub_price, 
+                                                   r.stock_left*r.stock_unit_cost_price as total_cost,
+                                                   r.stock_left * r.product_sub_price as total_sales
+                                                   from (select ps.id, st.product_sub_id, st.product_id, 
+                                                   p.product_full_name, ps.product_sub_name, st.stock_left, 
+                                                   st.stock_unit_cost_price, ps.product_sub_price
+                                                   from stock_tracker st
+                                                   inner join product_sub ps on st.product_sub_id = ps.id
+                                                   inner join product p on st.product_id = p.id ) as r 
+                                                   where r.id = '"+id+"'";
+                            }
+                          
                             mydbAccess.Select();
                         }
 
+                       
                         if (mydbAccess.Status == 1)
                         {
                             var result = mydbAccess.Result;
 
-                            for (int i = 0; i < result.Rows.Count; i++)
+                            if (category == 1)
                             {
-                                table.AddCell(result.Rows[i]["id"].ToString());
-                                table.AddCell(result.Rows[i]["sales_date"].ToString().Replace("12:00:00 AM", ""));
-                                table.AddCell(result.Rows[i]["product_full_name"].ToString());
-                                table.AddCell(result.Rows[i]["product_sub_name"].ToString());
-                                table.AddCell(result.Rows[i]["sales_quantity"].ToString());
-                                table.AddCell(result.Rows[i]["unit_cost_price"].ToString());
-                                table.AddCell(result.Rows[i]["product_sub_price"].ToString());
-                                table.AddCell(result.Rows[i]["total_cost"].ToString());
-                                table.AddCell(result.Rows[i]["total_sales"].ToString());
-                            }     
+                                for (int i = 0; i < result.Rows.Count; i++)
+                                {
+                                    string sn = (i + 1).ToString();
+
+                                    table.AddCell(sn);
+                                    table.AddCell(result.Rows[i]["sales_date"].ToString().Replace("12:00:00 AM", ""));
+                                    table.AddCell(result.Rows[i]["product_full_name"].ToString());
+                                    table.AddCell(result.Rows[i]["product_sub_name"].ToString());
+                                    table.AddCell(result.Rows[i]["sales_quantity"].ToString());
+                                    table.AddCell(result.Rows[i]["unit_cost_price"].ToString());
+                                    table.AddCell(result.Rows[i]["product_sub_price"].ToString());
+                                    table.AddCell(result.Rows[i]["total_cost"].ToString());
+                                    table.AddCell(result.Rows[i]["total_sales"].ToString());
+                                }
+
+                                table.AddCell("");
+                                table.AddCell("");
+                                table.AddCell(new Phrase("PROFIT", georgia2));
+                                table.AddCell(new Phrase("#" + label12.Text.Replace(".00", ""), georgia2));
+                                table.AddCell("");
+                                table.AddCell(new Phrase("GRAND", georgia2));
+                                table.AddCell(new Phrase("TOTAL", georgia2));
+                                table.AddCell(new Phrase("#" + label11.Text.Replace(".00", ""), georgia2));
+                                table.AddCell(new Phrase("#" + label10.Text.Replace(".00", ""), georgia2));
+                            }
+
+                            else
+                            {
+                                for (int i = 0; i < result.Rows.Count; i++)
+                                {
+                                    string sn = (i + 1).ToString();
+
+                                    table.AddCell(sn);
+                                    table.AddCell(result.Rows[i]["product_full_name"].ToString());
+                                    table.AddCell(result.Rows[i]["product_sub_name"].ToString());
+                                    table.AddCell(result.Rows[i]["stock_left"].ToString());
+                                    table.AddCell(result.Rows[i]["stock_unit_cost_price"].ToString());
+                                    table.AddCell(result.Rows[i]["product_sub_price"].ToString());
+                                    table.AddCell(result.Rows[i]["total_cost"].ToString());
+                                    table.AddCell(result.Rows[i]["total_sales"].ToString());
+                                }
+
+                                table.AddCell("");
+                                table.AddCell(new Phrase("PROFIT", georgia2));
+                                table.AddCell(new Phrase("#" + label12.Text.Replace(".00", ""), georgia2));
+
+                                if(radioButton2.Checked == true && radioButton4.Checked == true)
+                                {
+                                    table.AddCell(new Phrase(label14.Text, georgia2));
+                                }
+                                else
+                                {
+                                    table.AddCell("");
+                                }
+                               
+                                table.AddCell(new Phrase("GRAND", georgia2));
+                                table.AddCell(new Phrase("TOTAL", georgia2));
+                                table.AddCell(new Phrase("#" + label11.Text.Replace(".00", ""), georgia2));
+                                table.AddCell(new Phrase("#" + label10.Text.Replace(".00", ""), georgia2));
+                            }
+                           
                         }
+
+                        
 
                         doc1.Add(table);
                         doc1.Close();
@@ -379,7 +592,7 @@ namespace storeman
             }
             else
             {
-                MessageBox.Show("View Sales Report before Printing Details!");
+                MessageBox.Show("View Report before Printing Details!");
             }
         }
 
@@ -419,6 +632,8 @@ namespace storeman
                 label10.Hide();
                 label11.Hide();
                 label12.Hide();
+                label13.Hide();
+                label14.Hide();
             }
         }
 
@@ -455,6 +670,8 @@ namespace storeman
                 label10.Hide();
                 label11.Hide();
                 label12.Hide();
+                label13.Hide();
+                label14.Hide();
             }
         }
 
@@ -490,6 +707,8 @@ namespace storeman
                 label10.Hide();
                 label11.Hide();
                 label12.Hide();
+                label13.Hide();
+                label14.Hide();
             }
         }
 
@@ -508,15 +727,74 @@ namespace storeman
             form3.Show();
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox1.Enabled = true;
-            comboBox2.Enabled = true;
-            comboBox3.Enabled = true;
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+            label13.Hide();
+            label14.Hide();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+            label13.Hide();
+            label14.Hide();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+            label13.Hide();
+            label14.Hide();
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            category = 1;
+
+            label1.Text = "Sales Report";
+
+            label2.Text = "Total Sales";
+            label4.Text = "Total Cost";
+            label5.Text = "Profit";
+
+            dateTimePicker1.Enabled = true;
+            dateTimePicker2.Enabled = true;
 
             label10.Hide();
             label11.Hide();
             label12.Hide();
+            label13.Hide();
+            label14.Hide();
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            category = 2;
+
+            label1.Text = "Stock Report";
+
+            label2.Text = "Stock Worth";
+            label4.Text = "Stock Cost";
+            label5.Text = "Profit";
+
+            dateTimePicker1.Value = DateTime.Today;
+            dateTimePicker2.Value = DateTime.Today;
+
+            dateTimePicker1.Enabled = false;
+            dateTimePicker2.Enabled = false;
+
+            label10.Hide();
+            label11.Hide();
+            label12.Hide();
+            label13.Hide();
+            label14.Hide();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -530,25 +808,17 @@ namespace storeman
             comboBox3.Enabled = false;
         }
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            label10.Hide();
-            label11.Hide();
-            label12.Hide();
-        }
+            comboBox1.Enabled = true;
+            comboBox2.Enabled = true;
+            comboBox3.Enabled = true;
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
             label10.Hide();
             label11.Hide();
             label12.Hide();
-        }
-
-        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
-        {
-            label10.Hide();
-            label11.Hide();
-            label12.Hide();
+            label13.Hide();
+            label14.Hide();
         }
     }
 }
