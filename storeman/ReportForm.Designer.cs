@@ -53,6 +53,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -61,8 +63,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -116,6 +116,7 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.BackgroundImage = global::storeman.Properties.Resources.shopping_cart_512;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
@@ -385,6 +386,28 @@
             this.panel3.Size = new System.Drawing.Size(404, 408);
             this.panel3.TabIndex = 23;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(315, 49);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(77, 24);
+            this.label14.TabIndex = 49;
+            this.label14.Text = "label14";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(213, 49);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(106, 24);
+            this.label13.TabIndex = 48;
+            this.label13.Text = "Stock Left:";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -468,28 +491,6 @@
             this.button2.Text = "Print Details";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(213, 49);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(106, 24);
-            this.label13.TabIndex = 48;
-            this.label13.Text = "Stock Left:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(315, 49);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(77, 24);
-            this.label14.TabIndex = 49;
-            this.label14.Text = "label14";
             // 
             // ReportForm
             // 

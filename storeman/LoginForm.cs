@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using System.ServiceProcess;
 
 namespace storeman
 {
@@ -103,7 +104,41 @@ namespace storeman
             }
                
         }
-           
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int timeoutMilliseconds = 5000;
+                TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+                ServiceController myService = new ServiceController();
+                myService.ServiceName = "MSSQLServer";
+                string svcStatus = myService.Status.ToString();
+
+                if (svcStatus == "Running")
+                {
+                    MessageBox.Show("App is already Connected");
+                }
+
+                else if (svcStatus == "Stopped")
+                {
+                    myService.Start();
+                    myService.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    MessageBox.Show("App Connected");
+                }
+
+                else
+                {
+                    myService.Stop();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 
 }

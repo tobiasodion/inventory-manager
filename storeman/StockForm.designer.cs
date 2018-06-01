@@ -36,6 +36,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -123,6 +123,7 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.BackgroundImage = global::storeman.Properties.Resources.shopping_cart_512;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
@@ -174,6 +175,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(721, 326);
             this.panel2.TabIndex = 22;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(402, 286);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(67, 20);
+            this.label15.TabIndex = 47;
+            this.label15.Text = "label15";
             // 
             // label13
             // 
@@ -407,17 +419,6 @@
             this.label9.TabIndex = 21;
             this.label9.Text = "Quantity";
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(402, 286);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(67, 20);
-            this.label15.TabIndex = 47;
-            this.label15.Text = "label15";
-            // 
             // StockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -434,7 +435,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 486);
             this.Name = "StockForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form2";
+            this.Text = "Storeman";
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
